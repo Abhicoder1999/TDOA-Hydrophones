@@ -1,4 +1,4 @@
-# Install script for directory: /home/abhijeet/Documents/Tiburon/robosub2k19/codes/tdoa_code
+# Install script for directory: /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/abhijeet/Documents/Tiburon/robosub2k19/codes/tdoa_code/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
