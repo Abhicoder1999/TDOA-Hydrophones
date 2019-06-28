@@ -6,6 +6,5 @@ CMakeFiles/exe.dir/src/Util.cpp.o
  /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/Util.cpp
 CMakeFiles/exe.dir/src/tdoa.cpp.o
  ../include/Util.h
- ../include/data_accquire.h
  ../include/tdoa.h
  /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/tdoa.cpp

@@ -16,22 +16,6 @@ algorithm
 cmath
 -
 
-../include/data_accquire.h
-bcm2835.h
--
-stdio.h
--
-fstream
--
-vector
--
-complex
--
-cstring
--
-stdlib.h
--
-
 ../include/tdoa.h
 bcm2835.h
 -
@@ -65,6 +49,4 @@ tdoa.h
 /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/tdoa.h
 Util.h
 /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/Util.h
-data_accquire.h
-/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/data_accquire.h
 
