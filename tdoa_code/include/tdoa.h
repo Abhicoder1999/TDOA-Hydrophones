@@ -46,7 +46,8 @@ class Hydrophone{
       void calFreq();
       void peakExtraction();//find the Xseg by ifft of the data recieved
       void filter(float);
-      void debug();
+      void debug(int);
+      void writeFile(int,char*);
 
 };
 int Hydrophone::hyd_num = 0;
@@ -57,12 +58,12 @@ class Pair: public Hydrophone {
 
       static int pair_num;
       long delay;
-
-    public:
       Hydrophone h1;
       Hydrophone h2;
-
       double Fs;
+
+    public:
+
       int ID;
       Pair(double x)
       {
@@ -79,6 +80,7 @@ class Pair: public Hydrophone {
       bool getData(long);
       bool readFile(char*);
       void delay();
+
 
 };
 

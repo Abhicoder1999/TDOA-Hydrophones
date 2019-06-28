@@ -11,6 +11,4 @@
 
 using namespace std;
 
-void findPeaks(vector<float> x0, vector<int>& peakInds);
-
 #endif

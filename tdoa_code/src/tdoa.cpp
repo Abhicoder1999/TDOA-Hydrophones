@@ -95,6 +95,7 @@ bool Pair::getData(long len)
         	bcm2835_close();
 }
 
+
 bool Pair::readFile(char* filename)
 {
   ifstream file;
@@ -126,8 +127,8 @@ bool Pair::readFile(char* filename)
     // cout<<"file closed"<<endl;
     file.close();
 
-    h1.debug();
-    h2.debug();
+    h1.debug(1);
+    h2.debug(1);
     return true;
   }
   else
@@ -137,17 +138,57 @@ bool Pair::readFile(char* filename)
   }
 }
 
+void Pair::delay()
+{
+    h1.calFreq();
+    h2.calFreq();
 
-void Hydrophone::debug()
+    h1.debug(2);
+    h2.debug(2);
+
+    h1.filter(Fs);
+    h2.filter(Fs);
+
+    h1.debug(2);
+    h2.debug(2);
+
+}
+
+void Hydrophone::writeFile(int x,char* filename)
 {
 
-  tdata.pop_back();
-  cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
-  // len = len-1;
-  // cout<<"data in hyd"<<ID<<" len:"<<len<<endl;
-  // cout<<tdata.at(0)<<" "<<tdata.at(len-2)<<tdata.at(len-1)<<endl;
+ofstream file(filename);
+if(file.is_open())
+ {
+  if(x == 1)
+   {
+      for(int i=0;i<tdata.size();i++)
+      file<<tdata.at(i)<<endl;
 
+      cout<<"timeSample to file done..!"<<endl;
+    }
+  if(x == 2)
+    {
+        for(int i=0;i<fdata.size();i++)
+        file<<abs(fdata.at(i))<<endl;
 
+        cout<<"frequencySample to file done..!"<<endl;
+    }
+ }
+}
+
+void Hydrophone::debug(int i)
+{
+  if(i == 1)
+  {
+    tdata.pop_back();
+    cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
+  }
+  if(i == 2)
+  {
+    cout<<"frq size in hyd"<<ID<<": "<<fdata.size()<<endl;
+    cout<<"first and last element: "<<abs(fdata.at(0))<<" "<<abs(fdata.at(fdata.size()-1));
+  }
 }
 
 
@@ -191,9 +232,15 @@ int main()
   Pair p1;
 //  cout<<p1.ID<<" "<<p1.h1.ID<<" "<<p1.h2.ID<<endl;
   if(p1.readFile(filename))
-  cout<<"data read from file successfully"<<endl;
+  { cout<<-1;
+    cout<<"data read from file successfully"<<endl;
+    cout<<1;
+  }
   else
   cout<<"file couldnot be read"<<endl;
+
+  cout<<2;
+  p1.delay();
 
 return 0;
 }
