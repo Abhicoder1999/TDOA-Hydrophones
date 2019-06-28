@@ -1,179 +1,6 @@
-#include <bcm2835.h>
-#include <stdio.h>
-#include <fstream>
-#include <liquid/liquid.h>
-#include <iostream>
-#include <vector>
-#include <complex>
-#include <math.h>
-#include <cstring>
-#include<stdlib.h>
-#include <ctime>
-using namespace std;
-
-
-#define ADC_CONVST_2 RPI_BPLUS_GPIO_J8_31
-#define ADC_CONVST_1 RPI_BPLUS_GPIO_J8_35
-#define ADC_DIN_1 RPI_BPLUS_GPIO_J8_37
-#define ADC_DIN_2 RPI_BPLUS_GPIO_J8_33
-
-//Classes
-
-class Hydrophone{
-
-  private:
-    vector< complex<float> > tdata;
-    vector< complex<float> > fdata;
-    static int hyd_num;
-  public:
-      // int len;
-      int ID;
-
-      Hydrophone()
-      {
-        ID = hyd_num;
-        //len = 0;
-        hyd_num++;
-      }
-
-      void storeData(std::complex<float> x)
-      {
-
-        tdata.push_back(x);
-      //  len++;
-      }
-      void peakFinder();//finds the peak of the curve
-      void calFreq();
-      void peakExtraction();//find the Xseg by ifft of the data recieved
-      void filter(float);
-      void debug();
-
-};
-int Hydrophone::hyd_num = 0;
-
-
-
-class Pair: public Hydrophone {
-
-      static int pair_num;
-      long delay;
-
-    public:
-      Hydrophone h1;
-      Hydrophone h2;
-
-      double Fs;
-      int ID;
-      Pair(double x)
-      {
-        Fs = x;
-        ID = pair_num;
-        pair_num++;
-      }
-      Pair()
-      {
-        Fs = 0;
-        ID = pair_num;
-        pair_num++;
-      }
-      bool getData(long);
-      bool readFile(char*);
-      void delay();
-
-};
-
-int Pair::pair_num = 1;
-
-
-//Functions
-
-void Hydrophone::debug()
-{
-
-  tdata.pop_back();
-  cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
-  // len = len-1;
-  // cout<<"data in hyd"<<ID<<" len:"<<len<<endl;
-  // cout<<tdata.at(0)<<" "<<tdata.at(len-2)<<tdata.at(len-1)<<endl;
-
-
-}
-
-bool Pair::readFile(char* filename)
-{
-  ifstream file;
-  double Fs;
-
-  std::complex<float> temp;
-
-  file.open(filename);
-  if(file.is_open())
-  {
-    file>>Fs;
-    cout<<Fs<<endl;
-    float data;
-    while(!file.eof())
-    {
-
-      file>>data;
-      temp = data;
-      h1.storeData(temp);
-      // cout<<data<<endl;
-
-
-      file>>data;
-      temp = data;
-      h2.storeData(temp);
-      // cout<<data<<endl;
-    }
-
-    // cout<<"file closed"<<endl;
-    file.close();
-
-    h1.debug();
-    h2.debug();
-    return true;
-  }
-  else
-  {
-    cout<<"file didnt open"<<endl;
-    return false;
-  }
-
-}
-
-
-
-void Hydrophone::calFreq()
-{
-
-  fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&tdata),reinterpret_cast<liquid_float_complex*>(&fdata), LIQUID_FFT_FORWARD, 0);
-  fft_execute(fft);
-  fft_destroy_plan(fft);
-
-}
-
-void Hydrophone::filter(float Fs)
-{
-
-  if(fdata.size() != 0)
-  { float temp = Fs/(float)(fdata.size());//check if this is same as tdata
-    for(int i=0;i<fdata.size();i++)
-    {
-      float freq = (float)(i*Fs)/(float)(fdata.size());
-      if( freq<38000  &&  freq>42000 || freq<78000  &&  freq>82000 )
-      fdata.at(i) = 0;
-    }
-
-    fftplan ifft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&fdata),reinterpret_cast<liquid_float_complex*>(&tdata), LIQUID_FFT_BACKWARD, 0);
-    fft_execute(ifft);
-    fft_destroy_plan(ifft);
-
-  }
-  else
-  cout<<"frequency domain khali..!";
-
-}
+#include"tdoa.h"
+#include"Util.h"
+#include"data_accquire.h"
 
 
 bool Pair::getData(long len)
@@ -269,6 +96,95 @@ bool Pair::getData(long len)
         	bcm2835_spi_end();
         	bcm2835_close();
 }
+
+bool Pair::readFile(char* filename)
+{
+  ifstream file;
+  double Fs;
+
+  std::complex<float> temp;
+
+  file.open(filename);
+  if(file.is_open())
+  {
+    file>>Fs;
+    cout<<Fs<<endl;
+    float data;
+    while(!file.eof())
+    {
+
+      file>>data;
+      temp = data;
+      h1.storeData(temp);
+      // cout<<data<<endl;
+
+
+      file>>data;
+      temp = data;
+      h2.storeData(temp);
+      // cout<<data<<endl;
+    }
+
+    // cout<<"file closed"<<endl;
+    file.close();
+
+    h1.debug();
+    h2.debug();
+    return true;
+  }
+  else
+  {
+    cout<<"file didnt open"<<endl;
+    return false;
+  }
+}
+
+
+void Hydrophone::debug()
+{
+
+  tdata.pop_back();
+  cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
+  // len = len-1;
+  // cout<<"data in hyd"<<ID<<" len:"<<len<<endl;
+  // cout<<tdata.at(0)<<" "<<tdata.at(len-2)<<tdata.at(len-1)<<endl;
+
+
+}
+
+
+
+void Hydrophone::calFreq()
+{
+
+  fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&tdata),reinterpret_cast<liquid_float_complex*>(&fdata), LIQUID_FFT_FORWARD, 0);
+  fft_execute(fft);
+  fft_destroy_plan(fft);
+
+}
+
+void Hydrophone::filter(float Fs)
+{
+
+  if(fdata.size() != 0)
+  { float temp = Fs/(float)(fdata.size());//check if this is same as tdata
+    for(int i=0;i<fdata.size();i++)
+    {
+      float freq = (float)(i*Fs)/(float)(fdata.size());
+      if( freq<38000  &&  freq>42000 || freq<78000  &&  freq>82000 )
+      fdata.at(i) = 0;
+    }
+
+    fftplan ifft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&fdata),reinterpret_cast<liquid_float_complex*>(&tdata), LIQUID_FFT_BACKWARD, 0);
+    fft_execute(ifft);
+    fft_destroy_plan(ifft);
+
+  }
+  else
+  cout<<"frequency domain khali..!";
+
+}
+
 
 
 
