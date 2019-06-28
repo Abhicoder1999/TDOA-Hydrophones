@@ -1,7 +1,5 @@
 #include"tdoa.h"
 #include"Util.h"
-#include"data_accquire.h"
-
 
 bool Pair::getData(long len)
 {
@@ -184,8 +182,6 @@ void Hydrophone::filter(float Fs)
   cout<<"frequency domain khali..!";
 
 }
-
-
 
 
 int main()
