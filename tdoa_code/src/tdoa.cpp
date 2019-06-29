@@ -140,12 +140,15 @@ bool Pair::readFile(char* filename)
 
 void Pair::delay()
 {
+
     h1.calFreq();
     h2.calFreq();
 
     h1.debug(2);
     h2.debug(2);
 
+    h1.writeFile(2,"../plots/h1fr.txt");
+    h2.writeFile(2,"../plots/h2fr.txt");
     h1.filter(Fs);
     h2.filter(Fs);
 
@@ -187,7 +190,7 @@ void Hydrophone::debug(int i)
   if(i == 2)
   {
     cout<<"frq size in hyd"<<ID<<": "<<fdata.size()<<endl;
-    cout<<"first and last element: "<<abs(fdata.at(0))<<" "<<abs(fdata.at(fdata.size()-1));
+    // cout<<"first and last element: "<<abs(fdata.at(0))<<" "<<abs(fdata.at(fdata.size()-1))<<endl;
   }
 }
 
@@ -195,10 +198,20 @@ void Hydrophone::debug(int i)
 
 void Hydrophone::calFreq()
 {
-
-  fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&tdata),reinterpret_cast<liquid_float_complex*>(&fdata), LIQUID_FFT_FORWARD, 0);
+  // float complex * y = (float complex*) malloc(tdata.size() * sizeof(float complex));
+  std::complex<float>* input = tdata.data();
+  std::complex<float>* output = new std::complex<float>[tdata.size()];
+  fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_FORWARD, 0);
   fft_execute(fft);
+  complex<float> temp;
+  for(int i=0; i<tdata.size(); i++)
+  {
+  // cout<<abs(*output++)<<" ";
+  temp = abs(*output++);
+  fdata.push_back(temp);
+  }
   fft_destroy_plan(fft);
+  cout<<"fft done successfully :) for hyd"<<ID<<endl;
 
 }
 
@@ -206,17 +219,30 @@ void Hydrophone::filter(float Fs)
 {
 
   if(fdata.size() != 0)
-  { float temp = Fs/(float)(fdata.size());//check if this is same as tdata
+  { float b = Fs/(float)(fdata.size());//check if this is same as tdata
     for(int i=0;i<fdata.size();i++)
     {
-      float freq = (float)(i*Fs)/(float)(fdata.size());
+      float freq = (float)i*b;
       if( freq<38000  &&  freq>42000 || freq<78000  &&  freq>82000 )
       fdata.at(i) = 0;
     }
 
-    fftplan ifft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(&fdata),reinterpret_cast<liquid_float_complex*>(&tdata), LIQUID_FFT_BACKWARD, 0);
+    std::complex<float>* input = fdata.data();
+    std::complex<float>* output = new std::complex<float>[fdata.size()];
+    fftplan ifft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_BACKWARD, 0);
     fft_execute(ifft);
+
+    complex<float> temp;
+    for(int i=0; i<fdata.size(); i++)
+    {
+    // cout<<abs(*output++)<<" ";
+    temp = abs(*output++);
+    tdata.push_back(temp);
+    }
+
+    cout<<"filtering Done for hyd"<<ID<<endl;
     fft_destroy_plan(ifft);
+
 
   }
   else
@@ -232,14 +258,12 @@ int main()
   Pair p1;
 //  cout<<p1.ID<<" "<<p1.h1.ID<<" "<<p1.h2.ID<<endl;
   if(p1.readFile(filename))
-  { cout<<-1;
+  {
     cout<<"data read from file successfully"<<endl;
-    cout<<1;
   }
   else
   cout<<"file couldnot be read"<<endl;
 
-  cout<<2;
   p1.delay();
 
 return 0;

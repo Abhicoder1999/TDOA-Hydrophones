@@ -10,5 +10,6 @@
 #define EPS 2.2204e-16
 
 using namespace std;
+void findPeaks(vector<float>, vector<int>&);
 
 #endif
