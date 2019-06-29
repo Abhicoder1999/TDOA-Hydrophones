@@ -75,6 +75,7 @@ float stdDev(std::vector<float> values)
 				sd = sqrt(sd)/((values.size()-1));
 				return sd;
 		}
+
 }
 
 std::vector<int> smoothedZScore(std::vector<float> input,int lag,float threshold,float influence)

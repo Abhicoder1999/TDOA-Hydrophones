@@ -155,14 +155,19 @@ void Pair::delay()
     // h1.writeFile(1,"../plots/h1tfilt.txt");
     // h2.writeFile(1,"../plots/h2tfilt.txt");
     h1.peakFinder();
+    h1.debug(4);
     // h2.peakFinder();
-
+    // h2.debug(3);
     h1.writeFile(3,"../plots/h1seg.txt");
+    h1.writeFile(4,"../plots/h1peaks.txt");
     // h2.writeFile(3,"../plots/h2seg.txt");
 
 }
 
 /////////////////////HYD-FUN//////////////////////////
+// void Hydrophone::
+
+
 void Hydrophone::peakFinder()
 {
   // cout<<tdata.size()<<endl;
@@ -200,7 +205,45 @@ void Hydrophone::peakFinder()
     else
     pkind.push_back(0);
   }
-  cout<<"peakfinding ends"<<endl;
+  cout<<"Thresh ends"<<endl;
+
+  cout<<"going for wfall.. XD "<<pkind.size()<<endl;
+  int win;
+
+  vector< pair<int,int> > wfall;
+  for(int i=0;i<pkind.size();i++)
+  {
+  		if(pkind.at(i) == 1)
+  		 {   //cout<<i<<" ";
+          win = 40000;
+      		int count = 0;
+      		int avg = 0;
+          int j =0;
+  				for(j= 0; (j<win && (j+i)<pkind.size());j++)
+  				{
+  					if(pkind.at(i+j) == 1)
+  					{
+  						avg += (i+j);
+  						count++;
+
+  					}
+
+  				}
+        i = i+j;
+  			avg = avg/count;
+  			wfall.push_back(make_pair(count,avg));
+  		}
+  }
+
+  cout<<"wfall size:"<<wfall.size()<<endl;
+  sort(wfall.begin(),wfall.end(),greater< pair<int,int> >());
+
+  for(int i=0;i<7;i++)
+  {
+    peaks.push_back(wfall[i].second);
+    // cout<<wfall.at(i).second<<endl;
+  }
+
 }
 
 
@@ -217,21 +260,34 @@ if(file.is_open())
 
       cout<<"timeSample to file done..!"<<endl;
     }
-  if(x == 2)
+  else if(x == 2)
     {
         for(int i=0;i<fdata.size();i++)
         file<<abs(fdata.at(i))<<endl;
 
         cout<<"frequencySample to file done..!"<<endl;
     }
-  if(x == 3)
+  else if(x == 3)
     {
         for(int i=0;i<pkind.size();i++)
         file<<pkind.at(i)<<endl;
 
         cout<<"indexSample to file done..!"<<endl;
     }
+  else if(x == 4)
+    {   cout<<"inside";
+        for(int i=0;i<peaks.size();i++)
+        file<<peaks.at(i)<<endl;
+
+        cout<<"peaksSample to file done..!"<<endl;
+    }
+  else
+    cout<<"wrong int value"<<endl;
  }
+ else
+ cout<<"file couldnot open"<<endl;
+
+ file.close();
 }
 
 void Hydrophone::debug(int i)
@@ -249,6 +305,11 @@ void Hydrophone::debug(int i)
   if(i == 3)
   {
     cout<<"pkind size in hyd"<<ID<<": "<<pkind.size()<<endl;
+
+  }
+  if(i == 4)
+  {
+    cout<<"peaks size in hyd"<<ID<<": "<<peaks.size()<<endl;
 
   }
 

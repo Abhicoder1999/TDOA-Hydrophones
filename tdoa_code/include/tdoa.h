@@ -25,6 +25,7 @@ class Hydrophone{
     vector< complex<float> > tdata;
     vector< complex<float> > fdata;
     vector<int> pkind;
+    vector<int> peaks;
     static int hyd_num;
 
 
