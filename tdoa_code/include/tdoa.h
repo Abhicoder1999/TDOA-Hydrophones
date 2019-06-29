@@ -24,7 +24,10 @@ class Hydrophone{
   private:
     vector< complex<float> > tdata;
     vector< complex<float> > fdata;
+    vector<int> pkind;
     static int hyd_num;
+
+
   public:
       // int len;
       int ID;
@@ -54,7 +57,7 @@ int Hydrophone::hyd_num = 0;
 
 
 
-class Pair: public Hydrophone {
+class Pair: private Hydrophone {
 
       static int pair_num;
       long delay;

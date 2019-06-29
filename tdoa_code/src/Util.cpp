@@ -52,155 +52,81 @@ void signVector(vector<float> in, vector<int>& out)
 	}
 }
 
-
-void findPeaks(vector<float> x0, vector<int>& peakInds)
+float mean(vector<float> list)
 {
-	int minIdx = distance(x0.begin(), min_element(x0.begin(), x0.end()));
-	int maxIdx = distance(x0.begin(), max_element(x0.begin(), x0.end()));
+		float sum = 0;
+    for(int i=0;i<list.size();i++)
+		sum += list.at(i);
 
-	float sel = (x0[maxIdx]-x0[minIdx])/4.0;
-
-	int len0 = x0.size();
-
-	vector<float> dx;
-	diff(x0, dx);
-	replace(dx.begin(), dx.end(), 0.0, -EPS);
-	vector<float> dx0(dx.begin(), dx.end()-1);
-	vector<float> dx1(dx.begin()+1, dx.end());
-	vector<float> dx2;
-
-	vectorProduct(dx0, dx1, dx2);
-
-	vector<int> ind;
-	findIndicesLessThan(dx2, 0, ind); // Find where the derivative changes sign
-	
-	vector<float> x;
-
-	vector<int> indAux(ind.begin(), ind.end());
-	selectElements(x0, indAux, x);
-	x.insert(x.begin(), x0[0]);
-	x.insert(x.end(), x0[x0.size()-1]);;
+		return sum/(float)list.size();
+}
 
 
-	ind.insert(ind.begin(), 0);
-	ind.insert(ind.end(), len0);
+float stdDev(std::vector<float> values)
+{
+		float ret = 0;
+		if (values.size() > 0)
+		{
+				float avg = mean(values);
+				float sd = 0;
+				for(int i=0;i<values.size();i++)
+				sd += pow((values.at(i) - avg)/pow(10,8) ,2);
 
-	int minMagIdx = distance(x.begin(), min_element(x.begin(), x.end()));
-	float minMag = x[minMagIdx];
-	float leftMin = minMag;
-	int len = x.size();
+				sd = sqrt(sd)/((values.size()-1));
+				return sd;
+		}
+}
 
-	if(len>2)
-	{
-		float tempMag = minMag;
-    	bool foundPeak = false;
-    	int ii;
+std::vector<int> smoothedZScore(std::vector<float> input,int lag,float threshold,float influence)
+{
 
-    	// Deal with first point a little differently since tacked it on
-        // Calculate the sign of the derivative since we tacked the first
-        //  point on it does not neccessarily alternate like the rest.
-    	vector<float> xSub0(x.begin(), x.begin()+3);//tener cuidado subvector
-    	vector<float> xDiff;//tener cuidado subvector
-    	diff(xSub0, xDiff);
+    if (input.size() <= lag + 2)
+    {
+        std::vector<int> emptyVec;
+        return emptyVec;
+				cout<<"list is too small here"<<endl;
+    }
 
-    	vector<int> signDx;
-    	signVector(xDiff, signDx);
-
-        if (signDx[0] <= 0) // The first point is larger or equal to the second
+    //Initialise variables
+    std::vector<int> signals(input.size(), 0.0);
+    std::vector<float> filteredY(input.size(), 0.0);
+    std::vector<float> avgFilter(input.size(), 0.0);
+    std::vector<double> stdFilter(input.size(), 0.0);
+    std::vector<float> subVecStart(input.begin(), input.begin() + lag);
+    avgFilter[lag] = mean(subVecStart);
+    stdFilter[lag] = stdDev(subVecStart);
+		cout<<stdFilter[lag]<<endl;
+		// int countP = 0;
+		// int countN = 0;
+		// int zero = 0;
+    for (int i = lag + 1; i < input.size(); i++) //size_t i tha changed to int
+    {		//cout<<abs(input[i] - avgFilter[i - 1])<<" "<<threshold * stdFilter[i - 1]<<endl;
+        if (float(abs(input[i] - avgFilter[i - 1])) > threshold * stdFilter[i - 1])
         {
-            if (signDx[0] == signDx[1]) // Want alternating signs
-            {
-                x.erase(x.begin()+1);
-                ind.erase(ind.begin()+1);
-                len = len-1;
-            }
+            // if (input[i] > avgFilter[i - 1])
+            // {		countP++;
+            //     cc //# Positive signal
+            // }
+            // else
+						// {
+						// 		countN++;
+            //     signals[i] = -1; //# Negative signal
+            // }
+						signals[i] = 1;
+            //Make influence lower
+            filteredY[i] = influence* input[i] + (1 - influence) * filteredY[i - 1];
         }
-        else // First point is smaller than the second
+        else
         {
-            if (signDx[0] == signDx[1]) // Want alternating signs
-            {
-            	x.erase(x.begin());
-            	ind.erase(ind.begin());
-                len = len-1;
-            }
+            signals[i] = 0; //# No signal
+            filteredY[i] = input[i];
         }
+        //Adjust the filters
+        std::vector<float> subVec(filteredY.begin() + i - lag, filteredY.begin() + i);
+        avgFilter[i] = mean(subVec);
+        stdFilter[i] = stdDev(subVec);
+    }
 
-    	if ( x[0] >= x[1] )
-        	ii = 0;
-    	else
-        	ii = 1;
-
-    	float maxPeaks = ceil((float)len/2.0);
-    	vector<int> peakLoc(maxPeaks,0);
-    	vector<float> peakMag(maxPeaks,0.0);
-    	int cInd = 1;
-    	int tempLoc;
-    
-    	while(ii < len)
-    	{
-        	ii = ii+1;//This is a peak
-        	//Reset peak finding if we had a peak and the next peak is bigger
-        	//than the last or the left min was small enough to reset.
-        	if(foundPeak)
-        	{
-            	tempMag = minMag;
-            	foundPeak = false;
-            }
-        
-        	//Found new peak that was lager than temp mag and selectivity larger
-        	//than the minimum to its left.
-        
-        	if( x[ii-1] > tempMag && x[ii-1] > leftMin + sel )
-        	{
-            	tempLoc = ii-1;
-            	tempMag = x[ii-1];
-        	}
-
-        	//Make sure we don't iterate past the length of our vector
-        	if(ii == len)
-            	break; //We assign the last point differently out of the loop
-
-        	ii = ii+1; // Move onto the valley
-        	
-        	//Come down at least sel from peak
-        	if(!foundPeak && tempMag > sel + x[ii-1])
-            {            	
-	            foundPeak = true; //We have found a peak
-	            leftMin = x[ii-1];
-	            peakLoc[cInd-1] = tempLoc; // Add peak to index
-	            peakMag[cInd-1] = tempMag;
-	            cInd = cInd+1;
-	        }
-        	else if(x[ii-1] < leftMin) // New left minima
-            	leftMin = x[ii-1];
-            
-        }
-
-        // Check end point
-        if ( x[x.size()-1] > tempMag && x[x.size()-1] > leftMin + sel )
-        {
-            peakLoc[cInd-1] = len-1;
-            peakMag[cInd-1] = x[x.size()-1];
-            cInd = cInd + 1;
-        }
-        else if( !foundPeak && tempMag > minMag )// Check if we still need to add the last point
-        {
-            peakLoc[cInd-1] = tempLoc;
-            peakMag[cInd-1] = tempMag;
-            cInd = cInd + 1;
-        }
-
-    	//Create output
-    	if( cInd > 0 )
-    	{        	
-        	vector<int> peakLocTmp(peakLoc.begin(), peakLoc.begin()+cInd-1);
-			selectElements(ind, peakLocTmp, peakInds);
-        	//peakMags = vector<float>(peakLoc.begin(), peakLoc.begin()+cInd-1);
-        }
-    	
-
-
-	}
-
-
+		// cout<<threshold<<" "<<countP<<" "<<countN<<" "<<zero<<endl;
+    return signals;
 }

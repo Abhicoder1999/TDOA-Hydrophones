@@ -10,6 +10,9 @@
 #define EPS 2.2204e-16
 
 using namespace std;
-void findPeaks(vector<float>, vector<int>&);
+
+std::vector<int> smoothedZScore(std::vector<float> input,int lag ,float threshold ,float influence );
+float stdDev(std::vector<float> values);
+float mean(vector<float> list);
 
 #endif

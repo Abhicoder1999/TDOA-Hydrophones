@@ -10,15 +10,15 @@ def plot(filename,n):
     count = 0;
     for i in open("h1"+filename,'r'):
         x1.append(i)
-        y1.append(count)
+        y1.append(count+10000)
         count +=1
 
     plt.figure(n)
     plt.subplot(211)
-    plt.plot(y1[10000:-10000],x1[10000:-10000])
-
+    plt.plot(y1,x1)
+    # print(len(x1[10000:-10000]))
     count = 0
-    for i in open("h2" + filename,'r'):
+    for i in open("h1tfilt.txt",'r'):
         x2.append(i)
         y2.append(count)
         count +=1
@@ -31,5 +31,6 @@ def plot(filename,n):
 
 
 
-plot("filt.txt",1)
-plot("tfilt.txt",2)
+# plot("filt.txt",1)
+# plot("tfilt.txt",1)
+plot("seg.txt",2)

@@ -1,6 +1,7 @@
 #include"tdoa.h"
 #include"Util.h"
 
+/////////////////PAIR_FUN/////////////////////////////////
 bool Pair::getData(long len)
 {
 
@@ -143,20 +144,65 @@ void Pair::delay()
 
     h1.calFreq();
     h2.calFreq();
-
     // h1.writeFile(2,"../plots/h1fr.txt");
     // h2.writeFile(2,"../plots/h2fr.txt");
 
     h1.filter(Fs);
     h2.filter(Fs);
+    // h2.writeFile(2,"../plots/h2filt.txt");
+    // h1.writeFile(2,"../plots/h1filt.txt");
 
-    h1.writeFile(2,"../plots/h1filt.txt");
-    h2.writeFile(2,"../plots/h2filt.txt");
+    // h1.writeFile(1,"../plots/h1tfilt.txt");
+    // h2.writeFile(1,"../plots/h2tfilt.txt");
+    h1.peakFinder();
+    // h2.peakFinder();
 
-    h1.writeFile(1,"../plots/h1tfilt.txt");
-    h2.writeFile(1,"../plots/h2tfilt.txt");
+    h1.writeFile(3,"../plots/h1seg.txt");
+    // h2.writeFile(3,"../plots/h2seg.txt");
 
 }
+
+/////////////////////HYD-FUN//////////////////////////
+void Hydrophone::peakFinder()
+{
+  // cout<<tdata.size()<<endl;
+  // cout<<fdata.size()<<endl;
+  vector<float> values(0.0);
+
+  for(int i=0;i<tdata.size();i++)
+  {
+    values.push_back(abs(tdata.at(i)));
+
+  }
+
+  std::vector<float>segment;
+  int beginning = 10000;
+  int ending = 10000;
+
+  for(std::vector<float>::iterator it=values.begin()+beginning; it!=values.end()- ending; ++it)
+  {
+    segment.push_back(*it);
+  }
+  sort(segment.begin(),segment.end(),greater<float>());
+
+  int range = 50000;
+  float thr = 0;
+
+  for(int i=0; i<range;i++)
+  {
+    thr += segment.at(i)/range;
+  }
+  cout<<thr<<endl;
+  for(std::vector<float>::iterator it=values.begin()+beginning; it!=values.end()- ending; ++it)
+  {
+    if(*it>thr)
+    pkind.push_back(1);
+    else
+    pkind.push_back(0);
+  }
+  cout<<"peakfinding ends"<<endl;
+}
+
 
 void Hydrophone::writeFile(int x,char* filename)
 {
@@ -178,6 +224,13 @@ if(file.is_open())
 
         cout<<"frequencySample to file done..!"<<endl;
     }
+  if(x == 3)
+    {
+        for(int i=0;i<pkind.size();i++)
+        file<<pkind.at(i)<<endl;
+
+        cout<<"indexSample to file done..!"<<endl;
+    }
  }
 }
 
@@ -193,6 +246,13 @@ void Hydrophone::debug(int i)
     cout<<"frq size in hyd"<<ID<<": "<<fdata.size()<<endl;
     // cout<<"first and last element: "<<abs(fdata.at(0))<<" "<<abs(fdata.at(fdata.size()-1))<<endl;
   }
+  if(i == 3)
+  {
+    cout<<"pkind size in hyd"<<ID<<": "<<pkind.size()<<endl;
+
+  }
+
+
 }
 
 
@@ -270,14 +330,18 @@ int main()
   // cout<<filename<<endl;
   Pair p1;
 //  cout<<p1.ID<<" "<<p1.h1.ID<<" "<<p1.h2.ID<<endl;
-  if(p1.readFile(filename))
-  {
-    cout<<"data read from file successfully"<<endl;
-  }
-  else
-  cout<<"file couldnot be read"<<endl;
+    if(p1.readFile(filename))
+    {
+      cout<<"data read from file successfully"<<endl;
+    }
+    else
+    cout<<"file couldnot be read"<<endl;
 
-  p1.delay();
+    p1.delay();
+  // float myints[] = {1,2,3,4};
+  // std::vector<float> test (myints, myints + sizeof(myints) / sizeof(int) );
+  // cout<< mean(test)<<" "<<stdDev(test)<<endl;
+
 
 return 0;
 }
