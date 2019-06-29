@@ -1,5 +1,6 @@
-#include"tdoa.h"
 #include"Util.h"
+#include"tdoa.h"
+
 
 /////////////////PAIR_FUN/////////////////////////////////
 bool Pair::getData(long len)
@@ -155,23 +156,101 @@ void Pair::delay()
     // h1.writeFile(1,"../plots/h1tfilt.txt");
     // h2.writeFile(1,"../plots/h2tfilt.txt");
     h1.peakFinder();
-    h1.debug(4);
-    // h2.peakFinder();
-    // h2.debug(3);
-    h1.writeFile(3,"../plots/h1seg.txt");
-    h1.writeFile(4,"../plots/h1peaks.txt");
-    // h2.writeFile(3,"../plots/h2seg.txt");
+    // h1.debug(4);
+    // h1.writeFile(3,"../plots/h1seg.txt");
+    // h1.writeFile(4,"../plots/h1peaks.txt");
+    double delay = 0;
+
+    vector< vector< complex<float> > > v1;
+    for(int i=0;i<h1.peaks.size();i++)
+    {
+      v1.push_back(h1.peakExtraction(h1.peaks[i],5000));
+    }
+
+    vector< vector< complex<float> > > v2;
+    for(int i=0;i<h1.peaks.size();i++)
+    {
+      v2.push_back(h2.peakExtraction(h1.peaks[i],5000)); //note here hyd1 peaks are used
+    }
+
+    vector<double> d;
+    for(int i=0;i<h1.peaks.size();i++)
+    {
+      d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
+    }
+    double ans;
+    double std;
+    ans = mean(d);
+    std = stdDev(d);
+    cout<<"calculated delay:"<<ans<<endl;
+    cout<<"std deviation:"<<std<<endl;
+
+}
+double Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
+{
+
+  std::complex<float>* input1 = x1.data();
+  std::complex<float>* output1 = new std::complex<float>[x1.size()];
+  fftplan fft1 = fft_create_plan(x1.size(),reinterpret_cast<liquid_float_complex*>(input1),reinterpret_cast<liquid_float_complex*>(output1), LIQUID_FFT_FORWARD, 0);
+  fft_execute(fft1);
+
+
+  fft_destroy_plan(fft1);
+
+  std::complex<float>* input2 = x2.data();
+  std::complex<float>* output2 = new std::complex<float>[x2.size()];
+  fftplan fft2 = fft_create_plan(x2.size(),reinterpret_cast<liquid_float_complex*>(input2),reinterpret_cast<liquid_float_complex*>(output2), LIQUID_FFT_FORWARD, 0);
+  fft_execute(fft2);
+
+  fft_destroy_plan(fft2);
+
+  vector< complex<float> > c;
+
+
+  for(int i=0;i<x1.size();i++)
+  {
+    c.push_back((*output1++)*conj((*output2++)));
+  }
+
+  std::complex<float>* input = c.data();
+  std::complex<float>* output = new std::complex<float>[c.size()];
+  fftplan ifft = fft_create_plan(c.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_BACKWARD, 0);
+  fft_execute(ifft);
+
+  complex<float> temp;
+  vector< complex<float> > tc;
+  for(int i=0; i<c.size(); i++)
+  {
+
+  temp = abs(*output++);
+  tc.push_back(temp);
+  }
+
 
 }
 
+void Pair::smooth()
+{
+
+
+}
 /////////////////////HYD-FUN//////////////////////////
-// void Hydrophone::
+vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
+{
+      vector< complex<float> > subVec(len,0);
+      complex<float> temp;
+      for(int i=0; i<len;i++)
+      {
+        temp = abs(tdata.at(x-floor(len/2)+i));
+        subVec.push_back(temp);
+      }
+
+  return subVec;
+}
 
 
 void Hydrophone::peakFinder()
 {
-  // cout<<tdata.size()<<endl;
-  // cout<<fdata.size()<<endl;
   vector<float> values(0.0);
 
   for(int i=0;i<tdata.size();i++)
@@ -241,7 +320,6 @@ void Hydrophone::peakFinder()
   for(int i=0;i<7;i++)
   {
     peaks.push_back(wfall[i].second);
-    // cout<<wfall.at(i).second<<endl;
   }
 
 }

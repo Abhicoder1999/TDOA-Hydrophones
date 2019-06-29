@@ -11,8 +11,7 @@
 
 using namespace std;
 
-std::vector<int> smoothedZScore(std::vector<float> input,int lag ,float threshold ,float influence );
-float stdDev(std::vector<float> values);
-float mean(vector<float> list);
+double stdDev(std::vector<double> values);
+double mean(vector<double> list);
 
 #endif

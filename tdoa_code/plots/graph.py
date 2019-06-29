@@ -43,7 +43,7 @@ def plot_pk(type,n):
         y1.append(count+10000)
         count +=1
     for i in open(type+"peaks.txt",'r'):
-        x.append(10000)
+        x.append(30000)
         y.append(i)
 
 
@@ -51,7 +51,8 @@ def plot_pk(type,n):
     plt.figure(n)
     plt.subplot(211)
     plt.plot(y1,x1)
-    plt.plot(y,x)
+
+    # plt.stem(y,np.array([1000,1000,1000,1000,1000,1000,1000]).astype(np.float) )
 
     count = 0
     for i in open("h1tfilt.txt",'r'):
@@ -61,11 +62,8 @@ def plot_pk(type,n):
 
     plt.subplot(212)
     plt.plot(y2[10000:-10000],x2[10000:-10000])
-
+    # plt.stem(x,y,'r')
     plt.show()
 
 
-
-# plot("filt.txt",1)
-# plot("tfilt.txt",1)
-plot_pk("h1",2)
+plot_pk("h1",1)

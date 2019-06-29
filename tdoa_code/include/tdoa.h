@@ -25,13 +25,13 @@ class Hydrophone{
     vector< complex<float> > tdata;
     vector< complex<float> > fdata;
     vector<int> pkind;
-    vector<int> peaks;
     static int hyd_num;
 
 
   public:
       // int len;
       int ID;
+      vector<int> peaks;
 
       Hydrophone()
       {
@@ -48,7 +48,7 @@ class Hydrophone{
       }
       void peakFinder();//finds the peak of the curve
       void calFreq();
-      void peakExtraction();//find the Xseg by ifft of the data recieved
+      vector< complex<float> >  peakExtraction(int ind,int win);//find the Xseg by ifft of the data
       void filter(float);
       void debug(int);
       void writeFile(int,char*);
@@ -65,6 +65,8 @@ class Pair: private Hydrophone {
       Hydrophone h1;
       Hydrophone h2;
       double Fs;
+      void smooth();//lowpass smoothing
+      double correlation(vector< complex<float> >, vector< complex<float> >);//calculates the delay
 
     public:
 
