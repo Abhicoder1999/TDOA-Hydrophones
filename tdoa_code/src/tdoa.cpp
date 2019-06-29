@@ -99,7 +99,7 @@ bool Pair::getData(long len)
 bool Pair::readFile(char* filename)
 {
   ifstream file;
-  double Fs;
+  // double Fs;
 
   std::complex<float> temp;
 
@@ -144,16 +144,17 @@ void Pair::delay()
     h1.calFreq();
     h2.calFreq();
 
-    h1.debug(2);
-    h2.debug(2);
+    // h1.writeFile(2,"../plots/h1fr.txt");
+    // h2.writeFile(2,"../plots/h2fr.txt");
 
-    h1.writeFile(2,"../plots/h1fr.txt");
-    h2.writeFile(2,"../plots/h2fr.txt");
     h1.filter(Fs);
     h2.filter(Fs);
 
-    h1.debug(2);
-    h2.debug(2);
+    h1.writeFile(2,"../plots/h1filt.txt");
+    h2.writeFile(2,"../plots/h2filt.txt");
+
+    h1.writeFile(1,"../plots/h1tfilt.txt");
+    h2.writeFile(1,"../plots/h2tfilt.txt");
 
 }
 
@@ -166,7 +167,7 @@ if(file.is_open())
   if(x == 1)
    {
       for(int i=0;i<tdata.size();i++)
-      file<<tdata.at(i)<<endl;
+      file<<(tdata.at(i)).real()<<endl;
 
       cout<<"timeSample to file done..!"<<endl;
     }
@@ -217,15 +218,27 @@ void Hydrophone::calFreq()
 
 void Hydrophone::filter(float Fs)
 {
-
+  // cout<<Fs<<" "<<fdata.size()<<endl;
   if(fdata.size() != 0)
-  { float b = Fs/(float)(fdata.size());//check if this is same as tdata
+  { float b = (float)(Fs)/(float)(fdata.size());
+    // cout<<b<<endl;
+    // vector< complex<float> > fdata_filt(fdata.size(),0);
+    int fpass1 = 77000;//remember the order fpass1<fpass2
+    int fpass2 = 83000;
+
+    int fpass3 = 37000; //remember the order fpass3<fpass4
+    int fpass4 = 43000;
     for(int i=0;i<fdata.size();i++)
     {
-      float freq = (float)i*b;
-      if( freq<38000  &&  freq>42000 || freq<78000  &&  freq>82000 )
+      float freq = ((float)i*b);
+      if((freq>fpass1 && freq<fpass2) ||( (freq>fdata.size()-fpass2) && (freq<fdata.size()-fpass1) ))
+      continue;
+      else if ((freq>fpass3 && freq<fpass4) ||( (freq>fdata.size()-fpass4) && (freq<fdata.size()-fpass3) ))
+      continue;
+      else
       fdata.at(i) = 0;
     }
+
 
     std::complex<float>* input = fdata.data();
     std::complex<float>* output = new std::complex<float>[fdata.size()];
@@ -237,7 +250,7 @@ void Hydrophone::filter(float Fs)
     {
     // cout<<abs(*output++)<<" ";
     temp = abs(*output++);
-    tdata.push_back(temp);
+    tdata.at(i) = temp;
     }
 
     cout<<"filtering Done for hyd"<<ID<<endl;
