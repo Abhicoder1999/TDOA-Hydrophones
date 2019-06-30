@@ -52,7 +52,7 @@ void signVector(vector<float> in, vector<int>& out)
 	}
 }
 
-double mean(vector<double> list)
+double mean(vector<int> list)
 {
 		double sum = 0;
     for(int i=0;i<list.size();i++)
@@ -62,7 +62,7 @@ double mean(vector<double> list)
 }
 
 
-double stdDev(std::vector<double> values)
+double stdDev(std::vector<int> values)
 {
 		double ret = 0;
 		if (values.size() > 0)
@@ -70,7 +70,7 @@ double stdDev(std::vector<double> values)
 				double avg = mean(values);
 				double sd = 0;
 				for(int i=0;i<values.size();i++)
-				sd += pow((values.at(i) - avg)/pow(10,8) ,2);
+				sd += pow((values.at(i) - avg) ,2);
 
 				sd = sqrt(sd)/((values.size()-1));
 				return sd;

@@ -136,7 +136,21 @@ def plot_seg(filename,n,win):
 
     plt.show()
 
+def plot_cc(filename,n):
+    x1 = []
+    y1 = []
+    count = 0;
+    for i in open(filename,'r'):
+        x1.append(i)
+        y1.append(count)
+        count +=1
+
+    plt.figure(n)
+    plt.plot(y1,x1)
+    plt.show()
+
 # plot_tf("fall.txt")
 # plot_pk("h1",1)
-plot_tf("tfilt.txt",2)
-plot_seg("working.txt",3,20000)
+# plot_tf("tfilt.txt",2)
+# plot_seg("working.txt",3,20000)
+plot_cc("correlation.txt",4)

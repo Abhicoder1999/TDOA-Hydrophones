@@ -11,7 +11,9 @@
 
 using namespace std;
 
-double stdDev(std::vector<double> values);
-double mean(vector<double> list);
+double stdDev(std::vector<int> values);
+double mean(vector<int> list);
+void lrotateByOne(vector<float>& v);
+void lrotateByOne(vector<float>& v, long n);
 
 #endif

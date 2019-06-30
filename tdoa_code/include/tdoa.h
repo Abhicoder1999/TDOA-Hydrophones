@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <fstream>
 #include <liquid/liquid.h>
+#include <algorithm>
 #include <iostream>
 #include <vector>
 #include <complex>
@@ -67,7 +68,7 @@ class Pair: private Hydrophone {
       Hydrophone h2;
       double Fs;
       void smooth();//lowpass smoothing
-      double correlation(vector< complex<float> >, vector< complex<float> >);//calculates the delay
+      int correlation(vector< complex<float> >, vector< complex<float> >,ofstream& file);//calculates the delay
 
     public:
 

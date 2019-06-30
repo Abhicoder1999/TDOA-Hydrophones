@@ -140,22 +140,19 @@ bool Pair::readFile(char* filename)
   }
 }
 
-double Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
+int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,ofstream& file)
 {
 
   std::complex<float>* input1 = x1.data();
   std::complex<float>* output1 = new std::complex<float>[x1.size()];
   fftplan fft1 = fft_create_plan(x1.size(),reinterpret_cast<liquid_float_complex*>(input1),reinterpret_cast<liquid_float_complex*>(output1), LIQUID_FFT_FORWARD, 0);
   fft_execute(fft1);
-
-
   fft_destroy_plan(fft1);
 
   std::complex<float>* input2 = x2.data();
   std::complex<float>* output2 = new std::complex<float>[x2.size()];
   fftplan fft2 = fft_create_plan(x2.size(),reinterpret_cast<liquid_float_complex*>(input2),reinterpret_cast<liquid_float_complex*>(output2), LIQUID_FFT_FORWARD, 0);
   fft_execute(fft2);
-
   fft_destroy_plan(fft2);
 
   vector< complex<float> > c;
@@ -166,20 +163,29 @@ double Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x
     c.push_back((*output1++)*conj((*output2++)));
   }
 
-  std::complex<float>* input = c.data();
-  std::complex<float>* output = new std::complex<float>[c.size()];
-  fftplan ifft = fft_create_plan(c.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_BACKWARD, 0);
+  std::complex<float>* input3 = c.data();
+  std::complex<float>* output3 = new std::complex<float>[c.size()];
+  fftplan ifft = fft_create_plan(c.size(),reinterpret_cast<liquid_float_complex*>(input3),reinterpret_cast<liquid_float_complex*>(output3), LIQUID_FFT_BACKWARD, 0);
   fft_execute(ifft);
 
-  complex<float> temp;
-  vector< complex<float> > tc;
+  vector<float> tc;
   for(int i=0; i<c.size(); i++)
+    tc.push_back(abs(*output3++));
+
+
+  rotate(tc.begin(),tc.begin() + (tc.size()/2),tc.end());
+
+  if(file.is_open())
   {
-
-  temp = abs(*output++);
-  tc.push_back(temp);
+    for(int i=0;i<tc.size();i++)
+    file<<tc.at(i)<<endl;
   }
+  else
+  cout<<"file couldnot open"<<endl;
+  
 
+  int late = std::max_element(tc.begin(),tc.end()) - tc.begin() - tc.size()/2;
+  return late;
 
 }
 
@@ -219,6 +225,8 @@ void Pair::delay()
         v1.push_back(h1.peakExtraction(h1.peaks[i],20000,file1));
       }
     }
+    else
+    cout<<"file could not open"<<endl;
     file1.close();
 
     vector< vector< complex<float> > > v2;
@@ -230,19 +238,30 @@ void Pair::delay()
         v2.push_back(h2.peakExtraction(h1.peaks[i],20000,file2)); //note here hyd1 peaks are used
       }
     }
-    // file2.close();
-    // cout<<"both peak extraction done"<<endl;
-    // vector<double> d;
-    // for(int i=0;i<h1.peaks.size();i++)
-    // {
-    //   d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
-    // }
-    // double ans;
-    // double std;
-    // ans = mean(d);
-    // std = stdDev(d);
-    // cout<<"calculated delay:"<<ans<<endl;
-    // cout<<"std deviation:"<<std<<endl;
+    else
+    cout<<"file could not open"<<endl;
+    file2.close();
+    cout<<"both peak extraction done"<<endl;
+
+    vector<int> d;
+    ofstream file3("../plots/correlation.txt");
+    if(file3.is_open())
+    {  for(int i=0;i<h1.peaks.size();i++)
+      {
+        d.push_back(correlation(v1[i],v2[i],file3)); //note here hyd1 peaks are used
+        cout<<d.at(i)<<endl;
+      }
+    }
+    else
+    cout<<"file could not open"<<endl;
+    file3.close();
+    cout<<"convolution done ;)"<<endl;
+    double ans;
+    double std;
+    ans = mean(d);
+    std = stdDev(d);
+    cout<<"calculated delay:"<<ans<<endl;
+    cout<<"std deviation:"<<std<<endl;
 
 }
 /////////////////////HYD-FUN//////////////////////////
@@ -345,7 +364,7 @@ void Hydrophone::peakFinder()
 
   				}
         i = i+j;
-  			// avg = avg/count;
+
         // cout<<avg<<endl;
   			wfall.push_back(make_pair(count,avg));
   		}
