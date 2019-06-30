@@ -140,52 +140,6 @@ bool Pair::readFile(char* filename)
   }
 }
 
-void Pair::delay()
-{
-
-    h1.calFreq();
-    h2.calFreq();
-    // h1.writeFile(2,"../plots/h1fr.txt");
-    // h2.writeFile(2,"../plots/h2fr.txt");
-
-    h1.filter(Fs);
-    h2.filter(Fs);
-    // h2.writeFile(2,"../plots/h2filt.txt");
-    // h1.writeFile(2,"../plots/h1filt.txt");
-
-    // h1.writeFile(1,"../plots/h1tfilt.txt");
-    // h2.writeFile(1,"../plots/h2tfilt.txt");
-    h1.peakFinder();
-    // h1.debug(4);
-    // h1.writeFile(3,"../plots/h1seg.txt");
-    // h1.writeFile(4,"../plots/h1peaks.txt");
-    double delay = 0;
-
-    vector< vector< complex<float> > > v1;
-    for(int i=0;i<h1.peaks.size();i++)
-    {
-      v1.push_back(h1.peakExtraction(h1.peaks[i],5000));
-    }
-
-    vector< vector< complex<float> > > v2;
-    for(int i=0;i<h1.peaks.size();i++)
-    {
-      v2.push_back(h2.peakExtraction(h1.peaks[i],5000)); //note here hyd1 peaks are used
-    }
-
-    vector<double> d;
-    for(int i=0;i<h1.peaks.size();i++)
-    {
-      d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
-    }
-    double ans;
-    double std;
-    ans = mean(d);
-    std = stdDev(d);
-    cout<<"calculated delay:"<<ans<<endl;
-    cout<<"std deviation:"<<std<<endl;
-
-}
 double Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
 {
 
@@ -234,20 +188,97 @@ void Pair::smooth()
 
 
 }
-/////////////////////HYD-FUN//////////////////////////
-vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
+
+void Pair::delay()
 {
-      vector< complex<float> > subVec(len,0);
+
+    h1.calFreq();
+    h2.calFreq();
+    // h1.writeFile(2,"../plots/h1fr.txt");
+    // h2.writeFile(2,"../plots/h2fr.txt");
+
+    h1.filter(Fs);
+    h2.filter(Fs);
+    // h2.writeFile(2,"../plots/h2filt.txt");
+    // h1.writeFile(2,"../plots/h1filt.txt");
+
+    // h1.writeFile(1,"../plots/h1tfilt.txt");
+    // h2.writeFile(1,"../plots/h2tfilt.txt");
+    h1.peakFinder();
+    h1.debug(4);
+    // h1.writeFile(3,"../plots/h1fall.txt");
+    h1.writeFile(4,"../plots/h1peaks.txt");
+    double delay = 0;
+
+    vector< vector< complex<float> > > v1;
+    ofstream file1("../plots/h1working.txt");
+    if(file1.is_open())
+    {
+      for(int i=0;i<h1.peaks.size();i++)
+      {
+        v1.push_back(h1.peakExtraction(h1.peaks[i],20000,file1));
+      }
+    }
+    file1.close();
+
+    vector< vector< complex<float> > > v2;
+    ofstream file2("../plots/h2working.txt");
+    if(file2.is_open())
+    {
+      for(int i=0;i<h1.peaks.size();i++)
+      {
+        v2.push_back(h2.peakExtraction(h1.peaks[i],20000,file2)); //note here hyd1 peaks are used
+      }
+    }
+    // file2.close();
+    // cout<<"both peak extraction done"<<endl;
+    // vector<double> d;
+    // for(int i=0;i<h1.peaks.size();i++)
+    // {
+    //   d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
+    // }
+    // double ans;
+    // double std;
+    // ans = mean(d);
+    // std = stdDev(d);
+    // cout<<"calculated delay:"<<ans<<endl;
+    // cout<<"std deviation:"<<std<<endl;
+
+}
+/////////////////////HYD-FUN//////////////////////////
+vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
+  {    // cout<<filename<<" ";
+
+      std::vector<float> v;
       complex<float> temp;
+      vector< complex<float> > subVec;
+      // cout<<tdata.at(x).real()<<endl;
       for(int i=0; i<len;i++)
       {
-        temp = abs(tdata.at(x-floor(len/2)+i));
+        v.push_back(tdata.at(x-floor(len/2)+i).real());
+        temp = v.at(i);
         subVec.push_back(temp);
       }
+      // cout<<"peak extracted for:"<<x<<endl;
+      writeFile(v,file);
 
   return subVec;
 }
 
+void Hydrophone::writeFile(vector<float> v, ofstream& file)
+{
+
+  if(file.is_open())
+  {
+    for(int i=0;i<v.size();i++)
+    file<<v.at(i)<<endl;
+
+    // cout<<" file done..!"<<endl;
+  }
+  else
+  cout<<"file couldnot open"<<endl;
+
+}
 
 void Hydrophone::peakFinder()
 {
@@ -255,7 +286,7 @@ void Hydrophone::peakFinder()
 
   for(int i=0;i<tdata.size();i++)
   {
-    values.push_back(abs(tdata.at(i)));
+    values.push_back(tdata.at(i).real());
 
   }
 
@@ -286,39 +317,46 @@ void Hydrophone::peakFinder()
   }
   cout<<"Thresh ends"<<endl;
 
-  cout<<"going for wfall.. XD "<<pkind.size()<<endl;
+  cout<<"going for wfall.. XD "<<endl;
   int win;
 
   vector< pair<int,int> > wfall;
+
   for(int i=0;i<pkind.size();i++)
-  {
+  {   float max = 0;
   		if(pkind.at(i) == 1)
-  		 {   //cout<<i<<" ";
+  		 {
+         //cout<<i<<" ";
           win = 40000;
       		int count = 0;
       		int avg = 0;
           int j =0;
-  				for(j= 0; (j<win && (j+i)<pkind.size());j++)
+  				for(j = 0; (j<win && (j+i)<pkind.size());j++)
   				{
   					if(pkind.at(i+j) == 1)
   					{
-  						avg += (i+j);
-  						count++;
-
+              if(tdata.at(i+j+beginning).real()>max)
+              {
+                avg = (i+j+beginning);
+                max = tdata.at(i+j+beginning).real();
+              }
+              count++;
   					}
 
   				}
         i = i+j;
-  			avg = avg/count;
+  			// avg = avg/count;
+        // cout<<avg<<endl;
   			wfall.push_back(make_pair(count,avg));
   		}
   }
 
   cout<<"wfall size:"<<wfall.size()<<endl;
   sort(wfall.begin(),wfall.end(),greater< pair<int,int> >());
-
+  // int push_bias = 2500;
   for(int i=0;i<7;i++)
   {
+    // cout<<wfall[i].second<<endl;
     peaks.push_back(wfall[i].second);
   }
 
@@ -353,7 +391,7 @@ if(file.is_open())
         cout<<"indexSample to file done..!"<<endl;
     }
   else if(x == 4)
-    {   cout<<"inside";
+    {
         for(int i=0;i<peaks.size();i++)
         file<<peaks.at(i)<<endl;
 

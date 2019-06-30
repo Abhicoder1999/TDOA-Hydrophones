@@ -48,10 +48,11 @@ class Hydrophone{
       }
       void peakFinder();//finds the peak of the curve
       void calFreq();
-      vector< complex<float> >  peakExtraction(int ind,int win);//find the Xseg by ifft of the data
+      vector< complex<float> >  peakExtraction(int ind,int win,ofstream& file);//find the Xseg by ifft of the data
       void filter(float);
       void debug(int);
       void writeFile(int,char*);
+      void writeFile(vector<float>,ofstream& file);
 
 };
 int Hydrophone::hyd_num = 0;
