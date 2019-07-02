@@ -1,0 +1,10 @@
+
+
+3. add the smooth function
+4. correct the correlation even type (54 and -54 probs)
+5. make the system parameters more accesible easy for robosub changes
+6. add a different library part for the accquisition
+7. add the qt node part for display
+8. real time analysis and code ask rishab bhai
+9. multi-thread the code for pi
+10. complete all above before 20 ..!! XD

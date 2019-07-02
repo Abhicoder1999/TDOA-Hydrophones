@@ -175,14 +175,14 @@ int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,o
 
   rotate(tc.begin(),tc.begin() + (tc.size()/2),tc.end());
 
-  if(file.is_open())
-  {
-    for(int i=0;i<tc.size();i++)
-    file<<tc.at(i)<<endl;
-  }
-  else
-  cout<<"file couldnot open"<<endl;
-  
+  // if(file.is_open())
+  // {
+  //   for(int i=0;i<tc.size();i++)
+  //   file<<tc.at(i)<<endl;
+  // }
+  // else
+  // cout<<"file couldnot open"<<endl;
+
 
   int late = std::max_element(tc.begin(),tc.end()) - tc.begin() - tc.size()/2;
   return late;
@@ -198,6 +198,9 @@ void Pair::smooth()
 void Pair::delay()
 {
 
+    // h1.writeFile(1,"../plots/h1t.txt");
+    // h2.writeFile(1,"../plots/h2t.txt");
+
     h1.calFreq();
     h2.calFreq();
     // h1.writeFile(2,"../plots/h1fr.txt");
@@ -212,9 +215,12 @@ void Pair::delay()
     // h2.writeFile(1,"../plots/h2tfilt.txt");
     h1.peakFinder();
     h1.debug(4);
+    sort(h1.peaks.begin(),h1.peaks.end());
+
     // h1.writeFile(3,"../plots/h1fall.txt");
-    h1.writeFile(4,"../plots/h1peaks.txt");
+    // h1.writeFile(4,"../plots/h1peaks.txt");
     double delay = 0;
+    int win = 20000;
 
     vector< vector< complex<float> > > v1;
     ofstream file1("../plots/h1working.txt");
@@ -222,7 +228,7 @@ void Pair::delay()
     {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v1.push_back(h1.peakExtraction(h1.peaks[i],20000,file1));
+        v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
       }
     }
     else
@@ -235,7 +241,7 @@ void Pair::delay()
     {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v2.push_back(h2.peakExtraction(h1.peaks[i],20000,file2)); //note here hyd1 peaks are used
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
       }
     }
     else
@@ -274,12 +280,12 @@ vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& fi
       // cout<<tdata.at(x).real()<<endl;
       for(int i=0; i<len;i++)
       {
-        v.push_back(tdata.at(x-floor(len/2)+i).real());
+        v.push_back(abs(tdata.at(x-floor(len/2)+i)));
         temp = v.at(i);
         subVec.push_back(temp);
       }
       // cout<<"peak extracted for:"<<x<<endl;
-      writeFile(v,file);
+      // writeFile(v,file);
 
   return subVec;
 }
@@ -305,7 +311,7 @@ void Hydrophone::peakFinder()
 
   for(int i=0;i<tdata.size();i++)
   {
-    values.push_back(tdata.at(i).real());
+    values.push_back(abs(tdata.at(i)));
 
   }
 
@@ -347,26 +353,26 @@ void Hydrophone::peakFinder()
   		 {
          //cout<<i<<" ";
           win = 40000;
-      		int count = 0;
+          float max = 0;
+      		// int count = 0;
       		int avg = 0;
           int j =0;
   				for(j = 0; (j<win && (j+i)<pkind.size());j++)
   				{
   					if(pkind.at(i+j) == 1)
   					{
-              if(tdata.at(i+j+beginning).real()>max)
+              if(abs(tdata.at(i+j+beginning))>max)
               {
                 avg = (i+j+beginning);
-                max = tdata.at(i+j+beginning).real();
+                max = abs(tdata.at(i+j+beginning));
               }
-              count++;
+              // count++;
   					}
 
   				}
         i = i+j;
-
         // cout<<avg<<endl;
-  			wfall.push_back(make_pair(count,avg));
+  			wfall.push_back(make_pair(max,avg));
   		}
   }
 
@@ -391,7 +397,7 @@ if(file.is_open())
   if(x == 1)
    {
       for(int i=0;i<tdata.size();i++)
-      file<<(tdata.at(i)).real()<<endl;
+      file<<abs(tdata.at(i))<<endl;
 
       cout<<"timeSample to file done..!"<<endl;
     }
@@ -479,17 +485,19 @@ void Hydrophone::filter(float Fs)
   { float b = (float)(Fs)/(float)(fdata.size());
     // cout<<b<<endl;
     // vector< complex<float> > fdata_filt(fdata.size(),0);
-    int fpass1 = 77000;//remember the order fpass1<fpass2
-    int fpass2 = 83000;
+    int fpass1 = 78000;//remember the order fpass1<fpass2
+    int fpass2 = 82000;
 
-    int fpass3 = 37000; //remember the order fpass3<fpass4
-    int fpass4 = 43000;
+    int fpass3 = 38000; //remember the order fpass3<fpass4
+    int fpass4 = 42000;
+
+
     for(int i=0;i<fdata.size();i++)
     {
       float freq = ((float)i*b);
-      if((freq>fpass1 && freq<fpass2) ||( (freq>fdata.size()-fpass2) && (freq<fdata.size()-fpass1) ))
+      if((freq>fpass1 && freq<fpass2) ||( (freq>Fs-fpass2) && (freq<Fs-fpass1) ))
       continue;
-      else if ((freq>fpass3 && freq<fpass4) ||( (freq>fdata.size()-fpass4) && (freq<fdata.size()-fpass3) ))
+      else if ((freq>fpass3 && freq<fpass4) ||( (freq>Fs-fpass4) && (freq<Fs-fpass3) ))
       continue;
       else
       fdata.at(i) = 0;
@@ -498,7 +506,7 @@ void Hydrophone::filter(float Fs)
 
     std::complex<float>* input = fdata.data();
     std::complex<float>* output = new std::complex<float>[fdata.size()];
-    fftplan ifft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_BACKWARD, 0);
+    fftplan ifft = fft_create_plan(fdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_BACKWARD, 0);
     fft_execute(ifft);
 
     complex<float> temp;
@@ -522,10 +530,8 @@ void Hydrophone::filter(float Fs)
 
 int main()
 {
-  char* filename = "../pinger_data/l0.txt";
-  // cout<<filename<<endl;
+  char* filename = "../pinger_data/l120.txt";
   Pair p1;
-//  cout<<p1.ID<<" "<<p1.h1.ID<<" "<<p1.h2.ID<<endl;
     if(p1.readFile(filename))
     {
       cout<<"data read from file successfully"<<endl;
@@ -534,10 +540,6 @@ int main()
     cout<<"file couldnot be read"<<endl;
 
     p1.delay();
-  // float myints[] = {1,2,3,4};
-  // std::vector<float> test (myints, myints + sizeof(myints) / sizeof(int) );
-  // cout<< mean(test)<<" "<<stdDev(test)<<endl;
-
 
 return 0;
 }

@@ -35,24 +35,38 @@ def plot_pk(type,n):
     y1 = []
     x2 = []
     y2 = []
-    x = []
     y = []
-    count = 0;
+    x = []
+    count = 0
+    beginning = 10000
+
+    for i in open(type+"peaks.txt",'r'):
+        y.append(i) #includes the bias unlike the following part
+
+    y.sort()
+    j = 0
+    # print(len(y))
     for i in open(type+"fall.txt",'r'):
+
         x1.append(i)
-        y1.append(count+10000)
+        y1.append(count+beginning)
+
+        if ((j < len(y) and y1[count] == int(y[j]))):
+            x.append(1.5)
+            # print(str(j) + " " + (y[j]))
+            j +=1
+        else:
+            x.append(0)
+
         count +=1
-    # for i in open(type+"peaks.txt",'r'):
-    #     x.append(30000)
-    #     y.append(i)
+
+    # print(y1[0],int(y[0]))
 
 
 
     plt.figure(n)
-    plt.subplot(211)
-    plt.plot(y1,x1)
-
-    # plt.stem(y,np.array([1000,1000,1000,1000,1000,1000,1000]).astype(np.float) )
+    plt.subplot(311)
+    plt.plot(y1,x1,y1,x)
 
     count = 0
     for i in open("h1tfilt.txt",'r'):
@@ -60,10 +74,21 @@ def plot_pk(type,n):
         y2.append(count)
         count +=1
 
-    plt.subplot(212)
+    plt.subplot(312)
     plt.plot(y2[10000:-10000],x2[10000:-10000])
-    # plt.stem(x,y,'r')
+
+    count = 0
+    x2 = []
+    y2 = []
+    for i in open("h2tfilt.txt",'r'):
+        x2.append(i)
+        y2.append(count)
+        count +=1
+
+    plt.subplot(313)
+    plt.plot(y2[10000:-10000],x2[10000:-10000])
     plt.show()
+
 
 def plot_seg(filename,n,win):
     x =[]
@@ -149,8 +174,10 @@ def plot_cc(filename,n):
     plt.plot(y1,x1)
     plt.show()
 
-# plot_tf("fall.txt")
-# plot_pk("h1",1)
-# plot_tf("tfilt.txt",2)
-# plot_seg("working.txt",3,20000)
-plot_cc("correlation.txt",4)
+plot_tf("t.txt",1)
+# plot_tf("fr.txt",2)
+# plot_tf("filt.txt",3)
+# plot_tf("tfilt.txt",4)
+# plot_pk("h1",5)
+# plot_seg("working.txt",6,20000)
+# plot_cc("correlation.txt",7)
