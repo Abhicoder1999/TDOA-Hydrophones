@@ -1,5 +1,6 @@
 #include <bcm2835.h>
 #include <stdio.h>
+#include<fftw3.h>
 #include <fstream>
 #include <liquid/liquid.h>
 #include <algorithm>

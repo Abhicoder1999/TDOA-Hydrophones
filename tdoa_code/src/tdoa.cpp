@@ -129,8 +129,8 @@ bool Pair::readFile(char* filename)
     // cout<<"file closed"<<endl;
     file.close();
 
-    h1.debug(1);
-    h2.debug(1);
+    // h1.debug(1);
+    // h2.debug(1);
     return true;
   }
   else
@@ -200,14 +200,22 @@ void Pair::delay()
 
     // h1.writeFile(1,"../plots/h1t.txt");
     // h2.writeFile(1,"../plots/h2t.txt");
-
+    cout<<1<<endl;
+    h1.debug(1);
+    h2.debug(1);
     h1.calFreq();
     h2.calFreq();
+    h1.debug(2);
+    h2.debug(2);
+
     // h1.writeFile(2,"../plots/h1fr.txt");
     // h2.writeFile(2,"../plots/h2fr.txt");
 
     h1.filter(Fs);
     h2.filter(Fs);
+    cout<<2<<endl;
+    h1.debug(1);
+    h2.debug(1);
     // h2.writeFile(2,"../plots/h2filt.txt");
     // h1.writeFile(2,"../plots/h1filt.txt");
 
@@ -435,7 +443,8 @@ void Hydrophone::debug(int i)
 {
   if(i == 1)
   {
-    tdata.pop_back();
+    // tdata.pop_back();
+    cout<<"elements of hyd"<<ID<<": "<<abs(tdata.at(0))<<" "<<abs(tdata.at(1))<<" "<<abs(tdata.at(2))<<" "<<abs(tdata.at(tdata.size()-2))<<" "<<abs(tdata.at(tdata.size()-1))<<" "<<abs(tdata.at(tdata.size()-3))<<endl;
     cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
   }
   if(i == 2)
@@ -462,6 +471,7 @@ void Hydrophone::debug(int i)
 void Hydrophone::calFreq()
 {
   // float complex * y = (float complex*) malloc(tdata.size() * sizeof(float complex));
+  tdata.pop_back();
   std::complex<float>* input = tdata.data();
   std::complex<float>* output = new std::complex<float>[tdata.size()];
   fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_FORWARD, 0);
@@ -514,7 +524,7 @@ void Hydrophone::filter(float Fs)
     {
     // cout<<abs(*output++)<<" ";
     temp = abs(*output++);
-    tdata.at(i) = temp;
+    tdata.at(i) = temp.real()*(1.0/fdata.size());
     }
 
     cout<<"filtering Done for hyd"<<ID<<endl;

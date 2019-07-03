@@ -21,6 +21,8 @@ bcm2835.h
 -
 stdio.h
 -
+fftw3.h
+-
 fstream
 -
 liquid/liquid.h
