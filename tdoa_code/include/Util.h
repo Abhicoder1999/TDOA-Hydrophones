@@ -15,5 +15,7 @@ double stdDev(std::vector<int> values);
 double mean(vector<int> list);
 void lrotateByOne(vector<float>& v);
 void lrotateByOne(vector<float>& v, long n);
+// add writeFile && readFile here
+// add fft and ifft functions here
 
 #endif
