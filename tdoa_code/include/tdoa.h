@@ -88,7 +88,7 @@ class Pair: private Hydrophone {
       }
       bool getData(long);
       bool readFile(char*);
-      void delay();
+      double delay();
 
 
 };

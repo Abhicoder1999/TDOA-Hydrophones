@@ -197,7 +197,7 @@ void Pair::smooth()
 
 }
 
-void Pair::delay()
+double Pair::delay()
 {
 
     // h1.writeFile(1,"../plots/h1t.txt");
@@ -273,6 +273,8 @@ void Pair::delay()
     std = stdDev(d);
     cout<<"calculated delay:"<<ans<<endl;
     cout<<"std deviation:"<<std<<endl;
+
+    return ans;
 
 }
 /////////////////////HYD-FUN//////////////////////////
@@ -545,8 +547,10 @@ int main()
     else
     cout<<"file couldnot be read"<<endl;
 
-    p1.delay();
+    double delay;
 
+    delay = p1.delay();
+    
 
 return 0;
 }
