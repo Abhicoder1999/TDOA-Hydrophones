@@ -1,5 +1,5 @@
 # TDOA-Hydrophones
-In several underwater robotics competitions, localization of pinger in the water body is one of the essential and very challenging tasks underwater. This projects aim at competing this task using MATLAB and Signal Processing Libraries. 
+In several underwater robotics competitions, localization of pinger in the water body is one of the essential and very challenging tasks underwater. This projects aim at competing this task using MATLAB and Signal Processing Libraries.
 
 For MATLAB Simulations
 ----------------------
@@ -20,4 +20,4 @@ Libaries Used
 -----------
 1. bcm2835 ( for ADC interfacing SPI code )
 2. liquid_dsp library( for signal processing )
-3. Aquila library( for signal processing )
+3. FFTW-3.3.8 library( for signal processing )
