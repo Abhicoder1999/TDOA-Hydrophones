@@ -1,9 +1,21 @@
 #include"Util.h"
 #include"tdoa.h"
 
+////////////////////PARAMETERS//////////////////
+
+long int datasize = 1000000; // the no of datas you want
+//time of data you want can be changed by changing datasize length
+int flt_freq = 40000;
+// filtering frequency
+//check line 507 to set another frequency filter if you
+//find 2 peaks in the spectrum then set freq1 & freq2
+int best_pings = 3;
+// set this on the basis of the pings you get after visualising it
+
+// and remember you are getting delay not the angle
 
 /////////////////PAIR_FUN/////////////////////////////////
-bool Pair::getData(long len)
+bool Pair::getData(long len = datasize)
 {
 
       if (!bcm2835_init()){  printf("bcm2835_init failed.\n");
@@ -72,6 +84,7 @@ bool Pair::getData(long len)
           		bcm2835_gpio_write(ADC_DIN_2, HIGH);
 
 	          }
+      cout<<(clock() - begin_t)/CLOCKS_PER_SEC<<"s"<<endl;
       cout << (CLOCKS_PER_SEC*(float)len/(clock() - begin_t)) << "Hz" << endl;
       Fs = CLOCKS_PER_SEC*(float)len/(clock() - begin_t);//
 
@@ -200,6 +213,8 @@ void Pair::smooth()
 double Pair::delay()
 {
 
+    h1.debug(1);
+    h2.debug(1);
     // h1.writeFile(1,"../plots/h1t.txt");
     // h2.writeFile(1,"../plots/h2t.txt");
 
@@ -386,7 +401,7 @@ void Hydrophone::peakFinder()
   cout<<"wfall size:"<<wfall.size()<<endl;
   sort(wfall.begin(),wfall.end(),greater< pair<int,int> >());
   // int push_bias = 2500;
-  for(int i=0;i<7;i++)
+  for(int i=0;i<best_pings;i++)
   {
     // cout<<wfall[i].second<<endl;
     peaks.push_back(wfall[i].second);
@@ -443,8 +458,8 @@ void Hydrophone::debug(int i)
   if(i == 1)
   {
     // tdata.pop_back();
-    cout<<"elements of hyd"<<ID<<": "<<abs(tdata.at(0))<<" "<<abs(tdata.at(1))<<" "<<abs(tdata.at(2))<<" "<<abs(tdata.at(tdata.size()-2))<<" "<<abs(tdata.at(tdata.size()-1))<<" "<<abs(tdata.at(tdata.size()-3))<<endl;
-    cout<<"datasize in hyd"<<ID<<": "<<tdata.size()<<endl;
+    // cout<<"elements of hyd"<<ID<<": "<<abs(tdata.at(0))<<" "<<abs(tdata.at(1))<<" "<<abs(tdata.at(2))<<" "<<abs(tdata.at(tdata.size()-2))<<" "<<abs(tdata.at(tdata.size()-1))<<" "<<abs(tdata.at(tdata.size()-3))<<endl;
+    cout<<"tdata size in hyd"<<ID<<": "<<tdata.size()<<endl;
   }
   if(i == 2)
   {
@@ -490,15 +505,16 @@ void Hydrophone::calFreq()
 void Hydrophone::filter(float Fs)
 {
   // cout<<Fs<<" "<<fdata.size()<<endl;
+  //check the frequency domain of the data and set these peaks
   if(fdata.size() != 0)
   { float b = (float)(Fs)/(float)(fdata.size());
     // cout<<b<<endl;
     // vector< complex<float> > fdata_filt(fdata.size(),0);
     int fpass1 = 78000;//remember the order fpass1<fpass2
-    int fpass2 = 82000;
+    int fpass2 = 82000;//if you are getting any
 
-    int fpass3 = 38000; //remember the order fpass3<fpass4
-    int fpass4 = 42000;
+    int fpass3 = flt_freq - 2000; //remember the order fpass3<fpass4
+    int fpass4 = flt_freq + 2000;
 
 
     for(int i=0;i<fdata.size();i++)
@@ -538,19 +554,24 @@ void Hydrophone::filter(float Fs)
 
 int main()
 {
-  char* filename = "../pinger_data/l30.txt";
-  Pair p1;
-    if(p1.readFile(filename))
+  // char* filename = "../pinger_data/l90.txt";
+  // Pair p1;
+  //   if(p1.readFile(filename))
+  //   {
+  //     cout<<"data read from file successfully"<<endl;
+  //   }
+  //   else
+  //   cout<<"file couldnot be read"<<endl;
+    if(p1.getData())//this runs the ADC interface code to read the data;
     {
-      cout<<"data read from file successfully"<<endl;
+      cout<<"data read for both hyd\n";
     }
     else
-    cout<<"file couldnot be read"<<endl;
+      cout<<"data was not read\n";
 
     double delay;
-
     delay = p1.delay();
-    
+
 
 return 0;
 }

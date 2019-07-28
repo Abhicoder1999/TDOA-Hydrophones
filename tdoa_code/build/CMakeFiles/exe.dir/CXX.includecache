@@ -1,4 +1,4 @@
-#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
 
 #IncludeRegexScan: ^.*$
 
@@ -43,10 +43,6 @@ stdlib.h
 -
 ctime
 -
-
-/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/Util.cpp
-Util.h
-/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/Util.h
 
 /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/src/tdoa.cpp
 Util.h
