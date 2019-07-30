@@ -84,7 +84,7 @@ bool Pair::getData(long len = datasize)
           		bcm2835_gpio_write(ADC_DIN_2, HIGH);
 
 	          }
-      cout<<(clock() - begin_t)/CLOCKS_PER_SEC<<"s"<<endl;//
+      cout<<(clock() - begin_t)/CLOCKS_PER_SEC<<"s"<<endl;
       cout << (CLOCKS_PER_SEC*(float)len/(clock() - begin_t)) << "Hz" << endl;
       Fs = CLOCKS_PER_SEC*(float)len/(clock() - begin_t);//
 
@@ -194,7 +194,7 @@ int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
   //   for(int i=0;i<tc.size();i++)
   //   file<<tc.at(i)<<endl;
   //
-  //   // cout<<"correlation file done"<<endl;
+    // cout<<"correlation file done"<<endl;
   // }
   // else
   // cout<<"file couldnot open"<<endl;
@@ -250,7 +250,7 @@ double Pair::delay()
       for(int i=0;i<h1.peaks.size();i++)
       {
         // v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
-        v1.push_back(h2.peakExtraction(h1.peaks[i],win));
+        v1.push_back(h1.peakExtraction(h1.peaks[i],win));
       }
     // }
     // else
@@ -263,23 +263,22 @@ double Pair::delay()
     // {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        // v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
-        v2.push_back(h2.peakExtraction(h1.peaks[i],win));
+        // v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2));
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win)); //note here hyd1 peaks are used
       }
     // }
     // else
     // cout<<"file could not open"<<endl;
     // file2.close();
-    // cout<<"both peak extraction done"<<endl;
+    cout<<"both peak extraction done"<<endl;
 
     vector<int> d;
     // ofstream file3("../plots/correlation.txt");
     // if(file3.is_open())
     // {
-       for(int i=0;i<h1.peaks.size();i++)
+      for(int i=0;i<h1.peaks.size();i++)
       {
-        // d.push_back(correlation(v1[i],v2[i],file3)); //note here hyd1 peaks are used
-        d.push_back(correlation(v1[i],v2[i]));
+        d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
         cout<<d.at(i)<<endl;
       }
     // }
@@ -300,8 +299,7 @@ double Pair::delay()
 /////////////////////HYD-FUN//////////////////////////
 // vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
 vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
-  {
-      // cout<<filename<<" ";
+  {    // cout<<filename<<" ";
 
       std::vector<float> v;
       complex<float> temp;
@@ -313,7 +311,7 @@ vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
         temp = v.at(i);
         subVec.push_back(temp);
       }
-      // cout<<"peak extracted for:"<<x<<endl;
+      cout<<"peak extracted for:"<<x<<endl;
       // writeFile(v,file);
 
   return subVec;
@@ -561,20 +559,20 @@ void Hydrophone::filter(float Fs)
 
 int main()
 {
-  // char* filename = "../pinger_data/l90.txt";
   Pair p1;
-  //   if(p1.readFile(filename))
-  //   {
-  //     cout<<"data read from file successfully"<<endl;
-  //   }
-  //   else
-  //   cout<<"file couldnot be read"<<endl;
-    if(p1.getData())//this runs the ADC interface code to read the data;
+  char* filename = "../pinger_data/l90.txt";
+    if(p1.readFile(filename))
     {
-      cout<<"data read for both hyd\n";
+      cout<<"data read from file successfully"<<endl;
     }
     else
-      cout<<"data was not read\n";
+    cout<<"file couldnot be read"<<endl;
+    // if(p1.getData())//this runs the ADC interface code to read the data;
+    // {
+    //   cout<<"data read for both hyd\n";
+    // }
+    // else
+    //   cout<<"data was not read\n";
 
     double delay;
     delay = p1.delay();
