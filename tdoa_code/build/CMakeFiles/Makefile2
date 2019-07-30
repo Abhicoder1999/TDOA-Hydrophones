@@ -65,39 +65,76 @@ CMAKE_SOURCE_DIR = /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code
 CMAKE_BINARY_DIR = /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build
 
 #=============================================================================
-# Target rules for target CMakeFiles/exe.dir
+# Target rules for target CMakeFiles/server.dir
 
 # All Build rule for target.
-CMakeFiles/exe.dir/all:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/depend
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles --progress-num=1,2,3 "Built target exe"
-.PHONY : CMakeFiles/exe.dir/all
+CMakeFiles/server.dir/all:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/depend
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles --progress-num=1,2 "Built target server"
+.PHONY : CMakeFiles/server.dir/all
 
 # Include target in all.
-all: CMakeFiles/exe.dir/all
+all: CMakeFiles/server.dir/all
 
 .PHONY : all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/exe.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles 3
-	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/exe.dir/all
+CMakeFiles/server.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles 0
-.PHONY : CMakeFiles/exe.dir/rule
+.PHONY : CMakeFiles/server.dir/rule
 
 # Convenience name for target.
-exe: CMakeFiles/exe.dir/rule
+server: CMakeFiles/server.dir/rule
 
-.PHONY : exe
-
-# clean rule for target.
-CMakeFiles/exe.dir/clean:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/clean
-.PHONY : CMakeFiles/exe.dir/clean
+.PHONY : server
 
 # clean rule for target.
-clean: CMakeFiles/exe.dir/clean
+CMakeFiles/server.dir/clean:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/clean
+.PHONY : CMakeFiles/server.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/server.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/tdoa.dir
+
+# All Build rule for target.
+CMakeFiles/tdoa.dir/all:
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/depend
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles --progress-num=3,4,5 "Built target tdoa"
+.PHONY : CMakeFiles/tdoa.dir/all
+
+# Include target in all.
+all: CMakeFiles/tdoa.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/tdoa.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles 3
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/tdoa.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build/CMakeFiles 0
+.PHONY : CMakeFiles/tdoa.dir/rule
+
+# Convenience name for target.
+tdoa: CMakeFiles/tdoa.dir/rule
+
+.PHONY : tdoa
+
+# clean rule for target.
+CMakeFiles/tdoa.dir/clean:
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/clean
+.PHONY : CMakeFiles/tdoa.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/tdoa.dir/clean
 
 .PHONY : clean
 

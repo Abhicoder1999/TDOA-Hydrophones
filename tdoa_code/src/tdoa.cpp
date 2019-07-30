@@ -214,6 +214,25 @@ void Pair::smooth()
 
 
 }
+double Pair::delay_modified(long int data1[],long int data2[], int n)
+{
+
+std::complex<float> temp1;
+std::complex<float> temp2;
+
+  for(int i=0;i<n;i++)
+  {
+    temp1 = data1[i];
+    temp2 = data2[i];
+    h1.storeData(temp1);
+    h2.storeData(temp2);
+  }
+
+  double ans;
+  ans = this->delay();
+  return ans;
+
+}
 
 double Pair::delay()
 {
@@ -558,34 +577,4 @@ void Hydrophone::filter(float Fs)
   }
   else
   cout<<"frequency domain khali..!";
-
-}
-
-int main()
-{
-  Pair p1;
-// keep one part commented always
-
-// For file reading and Analysis
-  char* filename = "../pinger_data/l90.txt";
-    if(p1.readFile(filename))
-    {
-      cout<<"data read from file successfully"<<endl;
-    }
-    else
-    cout<<"file couldnot be read"<<endl;
-
-// For Real Time Data Extraction
-    // if(p1.getData())//this runs the ADC interface code to read the data;
-    // {
-    //   cout<<"data read for both hyd\n";
-    // }
-    // else
-    //   cout<<"data was not read\n";
-
-    double delay;
-    delay = p1.delay();
-
-
-return 0;
 }

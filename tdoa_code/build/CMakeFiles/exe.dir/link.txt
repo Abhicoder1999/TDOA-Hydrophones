@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/exe.dir/src/Util.cpp.o CMakeFiles/exe.dir/src/tdoa.cpp.o  -o exe  -L/usr/local/lib/libliquid.so  -L/usr/local/lib/libbcm2835.a -Wl,-rpath,/usr/local/lib/libliquid.so:/usr/local/lib/libbcm2835.a -lliquid -lbcm2835 -lfftw3 

@@ -111,17 +111,30 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named exe
+# Target rules for targets named server
 
 # Build rule for target.
-exe: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 exe
-.PHONY : exe
+server: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 server
+.PHONY : server
 
 # fast build rule for target.
-exe/fast:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/build
-.PHONY : exe/fast
+server/fast:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+.PHONY : server/fast
+
+#=============================================================================
+# Target rules for targets named tdoa
+
+# Build rule for target.
+tdoa: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tdoa
+.PHONY : tdoa
+
+# fast build rule for target.
+tdoa/fast:
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/build
+.PHONY : tdoa/fast
 
 src/Util.o: src/Util.cpp.o
 
@@ -129,7 +142,7 @@ src/Util.o: src/Util.cpp.o
 
 # target to build an object file
 src/Util.cpp.o:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/Util.cpp.o
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.o
 .PHONY : src/Util.cpp.o
 
 src/Util.i: src/Util.cpp.i
@@ -138,7 +151,7 @@ src/Util.i: src/Util.cpp.i
 
 # target to preprocess a source file
 src/Util.cpp.i:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/Util.cpp.i
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.i
 .PHONY : src/Util.cpp.i
 
 src/Util.s: src/Util.cpp.s
@@ -147,8 +160,35 @@ src/Util.s: src/Util.cpp.s
 
 # target to generate assembly for a file
 src/Util.cpp.s:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/Util.cpp.s
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.s
 .PHONY : src/Util.cpp.s
+
+src/server.o: src/server.cpp.o
+
+.PHONY : src/server.o
+
+# target to build an object file
+src/server.cpp.o:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.o
+.PHONY : src/server.cpp.o
+
+src/server.i: src/server.cpp.i
+
+.PHONY : src/server.i
+
+# target to preprocess a source file
+src/server.cpp.i:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.i
+.PHONY : src/server.cpp.i
+
+src/server.s: src/server.cpp.s
+
+.PHONY : src/server.s
+
+# target to generate assembly for a file
+src/server.cpp.s:
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.s
+.PHONY : src/server.cpp.s
 
 src/tdoa.o: src/tdoa.cpp.o
 
@@ -156,7 +196,7 @@ src/tdoa.o: src/tdoa.cpp.o
 
 # target to build an object file
 src/tdoa.cpp.o:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/tdoa.cpp.o
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.o
 .PHONY : src/tdoa.cpp.o
 
 src/tdoa.i: src/tdoa.cpp.i
@@ -165,7 +205,7 @@ src/tdoa.i: src/tdoa.cpp.i
 
 # target to preprocess a source file
 src/tdoa.cpp.i:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/tdoa.cpp.i
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.i
 .PHONY : src/tdoa.cpp.i
 
 src/tdoa.s: src/tdoa.cpp.s
@@ -174,7 +214,7 @@ src/tdoa.s: src/tdoa.cpp.s
 
 # target to generate assembly for a file
 src/tdoa.cpp.s:
-	$(MAKE) -f CMakeFiles/exe.dir/build.make CMakeFiles/exe.dir/src/tdoa.cpp.s
+	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.s
 .PHONY : src/tdoa.cpp.s
 
 # Help Target
@@ -185,10 +225,14 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... exe"
+	@echo "... server"
+	@echo "... tdoa"
 	@echo "... src/Util.o"
 	@echo "... src/Util.i"
 	@echo "... src/Util.s"
+	@echo "... src/server.o"
+	@echo "... src/server.i"
+	@echo "... src/server.s"
 	@echo "... src/tdoa.o"
 	@echo "... src/tdoa.i"
 	@echo "... src/tdoa.s"

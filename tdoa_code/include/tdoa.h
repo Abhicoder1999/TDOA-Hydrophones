@@ -1,6 +1,6 @@
 #include <bcm2835.h>
 #include <stdio.h>
-#include<fftw3.h>
+#include <fftw3.h>
 #include <fstream>
 #include <liquid/liquid.h>
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <complex>
 #include <math.h>
 #include <cstring>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <ctime>
 using namespace std;
 
@@ -72,6 +72,7 @@ class Pair: private Hydrophone {
       void smooth();//lowpass smoothing
       // int correlation(vector< complex<float> >, vector< complex<float> >,ofstream& file);//calculates the delay
       int correlation(vector< complex<float> >, vector< complex<float> >);
+
     public:
 
       int ID;
@@ -90,6 +91,7 @@ class Pair: private Hydrophone {
       bool getData(long);
       bool readFile(char*);
       double delay();
+      double delay_modified(long int*,long int*, int);
 
 
 };
