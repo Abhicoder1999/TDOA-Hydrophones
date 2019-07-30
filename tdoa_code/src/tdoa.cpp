@@ -320,10 +320,8 @@ double Pair::delay()
 
 }
 /////////////////////HYD-FUN//////////////////////////
-<<<<<<< HEAD
+
 // vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
-=======
->>>>>>> 8a175970b0ea546d24292f068b81758fc27b3d89
 vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
   {    // cout<<filename<<" ";
 
