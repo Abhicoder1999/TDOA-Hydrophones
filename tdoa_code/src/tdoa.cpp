@@ -84,7 +84,7 @@ bool Pair::getData(long len = datasize)
           		bcm2835_gpio_write(ADC_DIN_2, HIGH);
 
 	          }
-      cout<<(clock() - begin_t)/CLOCKS_PER_SEC<<"s"<<endl;
+      cout<<(clock() - begin_t)/CLOCKS_PER_SEC<<"s"<<endl;//
       cout << (CLOCKS_PER_SEC*(float)len/(clock() - begin_t)) << "Hz" << endl;
       Fs = CLOCKS_PER_SEC*(float)len/(clock() - begin_t);//
 
@@ -153,7 +153,8 @@ bool Pair::readFile(char* filename)
   }
 }
 
-int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,ofstream& file)
+// int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,ofstream& file)
+int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
 {
 
   std::complex<float>* input1 = x1.data();
@@ -188,15 +189,15 @@ int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,o
 
   rotate(tc.begin(),tc.begin() + (tc.size()/2),tc.end());
 
-  if(file.is_open())
-  {
-    for(int i=0;i<tc.size();i++)
-    file<<tc.at(i)<<endl;
-
-    // cout<<"correlation file done"<<endl;
-  }
-  else
-  cout<<"file couldnot open"<<endl;
+  // if(file.is_open())
+  // {
+  //   for(int i=0;i<tc.size();i++)
+  //   file<<tc.at(i)<<endl;
+  //
+  //   // cout<<"correlation file done"<<endl;
+  // }
+  // else
+  // cout<<"file couldnot open"<<endl;
 
 
   int late = std::max_element(tc.begin(),tc.end()) - tc.begin() - tc.size()/2;
@@ -237,50 +238,54 @@ double Pair::delay()
     h1.debug(4);
     sort(h1.peaks.begin(),h1.peaks.end());
 
-    h1.writeFile(3,"../plots/h1fall.txt");
-    h1.writeFile(4,"../plots/h1peaks.txt");
+    // h1.writeFile(3,"../plots/h1fall.txt");
+    // h1.writeFile(4,"../plots/h1peaks.txt");
     double delay = 0;
     int win = 20000;
 
     vector< vector< complex<float> > > v1;
-    ofstream file1("../plots/h1working.txt");
-    if(file1.is_open())
-    {
+    // ofstream file1("../plots/h1working.txt");
+    // if(file1.is_open())
+    // {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
+        // v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
+        v1.push_back(h2.peakExtraction(h1.peaks[i],win));
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file1.close();
+    // }
+    // else
+    // cout<<"file could not open"<<endl;
+    // file1.close();
 
     vector< vector< complex<float> > > v2;
-    ofstream file2("../plots/h2working.txt");
-    if(file2.is_open())
-    {
+    // ofstream file2("../plots/h2working.txt");
+    // if(file2.is_open())
+    // {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
+        // v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win));
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file2.close();
-    cout<<"both peak extraction done"<<endl;
+    // }
+    // else
+    // cout<<"file could not open"<<endl;
+    // file2.close();
+    // cout<<"both peak extraction done"<<endl;
 
     vector<int> d;
-    ofstream file3("../plots/correlation.txt");
-    if(file3.is_open())
-    {  for(int i=0;i<h1.peaks.size();i++)
+    // ofstream file3("../plots/correlation.txt");
+    // if(file3.is_open())
+    // {
+       for(int i=0;i<h1.peaks.size();i++)
       {
-        d.push_back(correlation(v1[i],v2[i],file3)); //note here hyd1 peaks are used
+        // d.push_back(correlation(v1[i],v2[i],file3)); //note here hyd1 peaks are used
+        d.push_back(correlation(v1[i],v2[i]));
         cout<<d.at(i)<<endl;
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file3.close();
+    // }
+    // else
+    // cout<<"file could not open"<<endl;
+    // file3.close();
     cout<<"convolution done ;)"<<endl;
     double ans;
     double std;
@@ -293,8 +298,10 @@ double Pair::delay()
 
 }
 /////////////////////HYD-FUN//////////////////////////
-vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
-  {    // cout<<filename<<" ";
+// vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
+vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
+  {
+      // cout<<filename<<" ";
 
       std::vector<float> v;
       complex<float> temp;
@@ -307,7 +314,7 @@ vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& fi
         subVec.push_back(temp);
       }
       // cout<<"peak extracted for:"<<x<<endl;
-      writeFile(v,file);
+      // writeFile(v,file);
 
   return subVec;
 }
@@ -555,7 +562,7 @@ void Hydrophone::filter(float Fs)
 int main()
 {
   // char* filename = "../pinger_data/l90.txt";
-  // Pair p1;
+  Pair p1;
   //   if(p1.readFile(filename))
   //   {
   //     cout<<"data read from file successfully"<<endl;
