@@ -11,6 +11,10 @@ int flt_freq = 40000;
 //find 2 peaks in the spectrum then set freq1 & freq2
 int best_pings = 3;
 // set this on the basis of the pings you get after visualising it
+//for doing correlation on the best_pings
+int range = 50000;
+// the average of largest (in time domain) are taken for ping thresholding
+//change the value to change the thresholding value (displayed in output too)
 
 // and remember you are getting delay not the angle
 
@@ -352,14 +356,14 @@ void Hydrophone::peakFinder()
   }
   sort(segment.begin(),segment.end(),greater<float>());
 
-  int range = 50000;
+
   float thr = 0;
 
   for(int i=0; i<range;i++)
   {
     thr += segment.at(i)/range;
   }
-  cout<<thr<<endl;
+  cout<<"the thresholding value: "<<thr<<endl;
   for(std::vector<float>::iterator it=values.begin()+beginning; it!=values.end()- ending; ++it)
   {
     if(*it>thr)
@@ -560,6 +564,9 @@ void Hydrophone::filter(float Fs)
 int main()
 {
   Pair p1;
+// keep one part commented always
+
+// For file reading and Analysis
   char* filename = "../pinger_data/l90.txt";
     if(p1.readFile(filename))
     {
@@ -567,6 +574,8 @@ int main()
     }
     else
     cout<<"file couldnot be read"<<endl;
+
+// For Real Time Data Extraction
     // if(p1.getData())//this runs the ADC interface code to read the data;
     // {
     //   cout<<"data read for both hyd\n";
