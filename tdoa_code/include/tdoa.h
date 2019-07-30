@@ -1,6 +1,6 @@
 #include <bcm2835.h>
 #include <stdio.h>
-#include<fftw3.h>
+#include <fftw3.h>
 #include <fstream>
 #include <liquid/liquid.h>
 #include <algorithm>
@@ -9,7 +9,7 @@
 #include <complex>
 #include <math.h>
 #include <cstring>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <ctime>
 using namespace std;
 
@@ -50,7 +50,7 @@ class Hydrophone{
       }
       void peakFinder();//finds the peak of the curve
       void calFreq();
-      vector< complex<float> >  peakExtraction(int ind,int win,ofstream& file);//find the Xseg by ifft of the data
+      vector< complex<float> >  peakExtraction(int ind,int win);//find the Xseg by ifft of the data
       void filter(float);
       void debug(int);
       void writeFile(int,char*);
@@ -69,7 +69,7 @@ class Pair: private Hydrophone {
       Hydrophone h2;
       double Fs;
       void smooth();//lowpass smoothing
-      int correlation(vector< complex<float> >, vector< complex<float> >,ofstream& file);//calculates the delay
+      int correlation(vector< complex<float> >, vector< complex<float> >);//calculates the delay
 
     public:
 

@@ -11,7 +11,7 @@ int flt_freq = 40000;
 //find 2 peaks in the spectrum then set freq1 & freq2
 int best_pings = 3;
 // set this on the basis of the pings you get after visualising it
-
+int range = 50000;
 // and remember you are getting delay not the angle
 
 /////////////////PAIR_FUN/////////////////////////////////
@@ -153,7 +153,7 @@ bool Pair::readFile(char* filename)
   }
 }
 
-int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,ofstream& file)
+int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
 {
 
   std::complex<float>* input1 = x1.data();
@@ -188,7 +188,7 @@ int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,o
 
   rotate(tc.begin(),tc.begin() + (tc.size()/2),tc.end());
 
-  if(file.is_open())
+  /*if(file.is_open())
   {
     for(int i=0;i<tc.size();i++)
     file<<tc.at(i)<<endl;
@@ -197,7 +197,7 @@ int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,o
   }
   else
   cout<<"file couldnot open"<<endl;
-
+*/
 
   int late = std::max_element(tc.begin(),tc.end()) - tc.begin() - tc.size()/2;
   return late;
@@ -237,51 +237,52 @@ double Pair::delay()
     h1.debug(4);
     sort(h1.peaks.begin(),h1.peaks.end());
 
-    h1.writeFile(3,"../plots/h1fall.txt");
-    h1.writeFile(4,"../plots/h1peaks.txt");
+  //  h1.writeFile(3,"../plots/h1fall.txt");
+  //  h1.writeFile(4,"../plots/h1peaks.txt");
     double delay = 0;
     int win = 20000;
 
     vector< vector< complex<float> > > v1;
-    ofstream file1("../plots/h1working.txt");
-    if(file1.is_open())
-    {
+    //ofstream file1("../plots/h1working.txt");
+    //if(file1.is_open())
+    //{
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
+        v1.push_back(h1.peakExtraction(h1.peaks[i],win));
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file1.close();
+    //}
+    //else
+    //cout<<"file could not open"<<endl;
+    //file1.close();
 
     vector< vector< complex<float> > > v2;
-    ofstream file2("../plots/h2working.txt");
-    if(file2.is_open())
-    {
+    //ofstream file2("../plots/h2working.txt");
+    //if(file2.is_open())
+    //{
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win)); //note here hyd1 peaks are used
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file2.close();
-    cout<<"both peak extraction done"<<endl;
+    //}
+    //else
+    //cout<<"file could not open"<<endl;
+    //file2.close();
+    //cout<<"both peak extraction done"<<endl;
 
     vector<int> d;
-    ofstream file3("../plots/correlation.txt");
-    if(file3.is_open())
-    {  for(int i=0;i<h1.peaks.size();i++)
+    //ofstream file3("../plots/correlation.txt");
+    //if(file3.is_open())
+    //{  
+    for(int i=0;i<h1.peaks.size();i++)
       {
-        d.push_back(correlation(v1[i],v2[i],file3)); //note here hyd1 peaks are used
-        cout<<d.at(i)<<endl;
+        d.push_back(correlation(v1[i],v2[i])); //note here hyd1 peaks are used
+        //cout<<d.at(i)<<endl;
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file3.close();
-    cout<<"convolution done ;)"<<endl;
+    //}
+    //else
+    //cout<<"file could not open"<<endl;
+    //file3.close();
+    //cout<<"convolution done ;)"<<endl;
     double ans;
     double std;
     ans = mean(d);
@@ -293,7 +294,7 @@ double Pair::delay()
 
 }
 /////////////////////HYD-FUN//////////////////////////
-vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
+vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
   {    // cout<<filename<<" ";
 
       std::vector<float> v;
@@ -307,7 +308,7 @@ vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& fi
         subVec.push_back(temp);
       }
       // cout<<"peak extracted for:"<<x<<endl;
-      writeFile(v,file);
+      //writeFile(v,file);
 
   return subVec;
 }
@@ -347,7 +348,6 @@ void Hydrophone::peakFinder()
   }
   sort(segment.begin(),segment.end(),greater<float>());
 
-  int range = 50000;
   float thr = 0;
 
   for(int i=0; i<range;i++)
@@ -549,29 +549,4 @@ void Hydrophone::filter(float Fs)
   }
   else
   cout<<"frequency domain khali..!";
-
-}
-
-int main()
-{
-  // char* filename = "../pinger_data/l90.txt";
-  // Pair p1;
-  //   if(p1.readFile(filename))
-  //   {
-  //     cout<<"data read from file successfully"<<endl;
-  //   }
-  //   else
-  //   cout<<"file couldnot be read"<<endl;
-    if(p1.getData())//this runs the ADC interface code to read the data;
-    {
-      cout<<"data read for both hyd\n";
-    }
-    else
-      cout<<"data was not read\n";
-
-    double delay;
-    delay = p1.delay();
-
-
-return 0;
 }
