@@ -70,6 +70,7 @@ int main(int argc, char const *argv[])
     printf("Usage: <executable> <PORT NUMBER>\n");
     return -1;
   }
+
   signal(SIGINT, handler);
   signal(SIGPIPE, sig_pipe);
   char *str = "126.44,32.5#";
@@ -139,6 +140,5 @@ int main(int argc, char const *argv[])
         }
 
   }
-
 
 }

@@ -124,6 +124,19 @@ server/fast:
 .PHONY : server/fast
 
 #=============================================================================
+# Target rules for targets named debug
+
+# Build rule for target.
+debug: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 debug
+.PHONY : debug
+
+# fast build rule for target.
+debug/fast:
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/build
+.PHONY : debug/fast
+
+#=============================================================================
 # Target rules for targets named tdoa
 
 # Build rule for target.
@@ -162,6 +175,33 @@ src/Util.s: src/Util.cpp.s
 src/Util.cpp.s:
 	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.s
 .PHONY : src/Util.cpp.s
+
+src/debug.o: src/debug.cpp.o
+
+.PHONY : src/debug.o
+
+# target to build an object file
+src/debug.cpp.o:
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.o
+.PHONY : src/debug.cpp.o
+
+src/debug.i: src/debug.cpp.i
+
+.PHONY : src/debug.i
+
+# target to preprocess a source file
+src/debug.cpp.i:
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.i
+.PHONY : src/debug.cpp.i
+
+src/debug.s: src/debug.cpp.s
+
+.PHONY : src/debug.s
+
+# target to generate assembly for a file
+src/debug.cpp.s:
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.s
+.PHONY : src/debug.cpp.s
 
 src/server.o: src/server.cpp.o
 
@@ -226,10 +266,14 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... server"
+	@echo "... debug"
 	@echo "... tdoa"
 	@echo "... src/Util.o"
 	@echo "... src/Util.i"
 	@echo "... src/Util.s"
+	@echo "... src/debug.o"
+	@echo "... src/debug.i"
+	@echo "... src/debug.s"
 	@echo "... src/server.o"
 	@echo "... src/server.i"
 	@echo "... src/server.s"

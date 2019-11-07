@@ -10,4 +10,12 @@ include_directories(include)
 
 add_library(tdoa include/Util.h include/tdoa.h src/tdoa.cpp src/Util.cpp)
 add_executable(server src/server.cpp)
+add_executable(debug src/debug.cpp)
+
+#file(GLOB SOURCES "src/*.cpp")
+
+#add_executable(exe ${SOURCES})
+#target_link_libraries(exe liquid bcm2835 fftw3)
+
 target_link_libraries(server liquid bcm2835 fftw3)
+target_link_libraries(debug liquid bcm2835 fftw3)
