@@ -48,6 +48,11 @@ class Hydrophone{
         tdata.push_back(x);
       //  len++;
       }
+      bool empty()
+      {
+          tdata.clear();
+          return true;
+      }
       void peakFinder();//finds the peak of the curve
       void calFreq();
       vector< complex<float> >  peakExtraction(int ind,int win,ofstream& file);//find the Xseg by ifft of the data
@@ -88,6 +93,11 @@ class Pair: private Hydrophone {
         ID = pair_num;
         pair_num++;
       }
+      bool flushData()
+      {
+        return ( h1.empty() && h2.empty());
+      }
+
       bool getData(long);
       bool readFile(char*);
       double delay();

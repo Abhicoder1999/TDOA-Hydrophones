@@ -3,20 +3,31 @@
 #include"../src/Util.cpp"
 ////////////////////PARAMETERS//////////////////
 
-long int datasize = 1000000; // the no of datas you want
+long int datasize = 1000; // the no of datas you want
 //time of data you want can be changed by changing datasize length
 int flt_freq = 40000;
 // filtering frequency
 //check line 507 to set another frequency filter if you
 //find 2 peaks in the spectrum then set freq1 & freq2
-int best_pings = 3;
+int best_pings = 1;
 // set this on the basis of the pings you get after visualising it
+
+int range = 50000;
+// the average of largest (in time domain) are taken for ping thresholding
+//change the value to change the thresholding value (displayed in output too)
 
 // and remember you are getting delay not the angle
 
 /////////////////PAIR_FUN/////////////////////////////////
 bool Pair::getData(long len = datasize)
 {
+      if(flushData())
+      cout<<"data flushing done..!";
+      else
+      {
+        cout<<"data could not flush";
+        return false;
+      }
 
       if (!bcm2835_init()){  printf("bcm2835_init failed.\n");
         	return(0);}
@@ -108,6 +119,7 @@ bool Pair::getData(long len = datasize)
       }
         	bcm2835_spi_end();
         	bcm2835_close();
+          return true;
 }
 
 
@@ -210,35 +222,61 @@ void Pair::smooth()
 
 }
 
+double Pair::delay_modified(long int data1[],long int data2[], int n)
+{
+  if(flushData())
+  cout<<"data flushing done..!";
+  else
+  {
+    return 101;
+  }
+
+std::complex<float> temp1;
+std::complex<float> temp2;
+  // h1.empty(); this function will empty if anyting is there prv
+  for(int i=0;i<n;i++)
+  {
+    temp1 = data1[i];
+    temp2 = data2[i];
+    h1.storeData(temp1);
+    h2.storeData(temp2);
+  }
+
+  double ans;
+  ans = this->delay();
+  return ans;
+
+}
+
 double Pair::delay()
 {
 
     h1.debug(1);
     h2.debug(1);
-    h1.writeFile(1,"../plots/h1t.txt");
-    h2.writeFile(1,"../plots/h2t.txt");
+    // h1.writeFile(1,"../plots/h1t.txt");
+    // h2.writeFile(1,"../plots/h2t.txt");
 
     h1.calFreq();
     h2.calFreq();
-    h1.debug(2);
-    h2.debug(2);
+    // h1.debug(2);
+    // h2.debug(2);
 
-    h2.writeFile(2,"../plots/h2fr.txt");
-    h1.writeFile(2,"../plots/h1fr.txt");
+    // h2.writeFile(2,"../plots/h2fr.txt");
+    // h1.writeFile(2,"../plots/h1fr.txt");
 
     h1.filter(Fs);
     h2.filter(Fs);
-    h2.writeFile(2,"../plots/h2filt.txt");
-    h1.writeFile(2,"../plots/h1filt.txt");
+    // h2.writeFile(2,"../plots/h2filt.txt");
+    // h1.writeFile(2,"../plots/h1filt.txt");
 
-    h1.writeFile(1,"../plots/h1tfilt.txt");
-    h2.writeFile(1,"../plots/h2tfilt.txt");
+    // h1.writeFile(1,"../plots/h1tfilt.txt");
+    // h2.writeFile(1,"../plots/h2tfilt.txt");
     h1.peakFinder();
     h1.debug(4);
     sort(h1.peaks.begin(),h1.peaks.end());
 
-    h1.writeFile(3,"../plots/h1fall.txt");
-    h1.writeFile(4,"../plots/h1peaks.txt");
+    // h1.writeFile(3,"../plots/h1fall.txt");
+    // h1.writeFile(4,"../plots/h1peaks.txt");
     double delay = 0;
     int win = 20000;
 
@@ -261,7 +299,7 @@ double Pair::delay()
     {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used as better SNR was their
       }
     }
     else
@@ -347,7 +385,7 @@ void Hydrophone::peakFinder()
   }
   sort(segment.begin(),segment.end(),greater<float>());
 
-  int range = 50000;
+
   float thr = 0;
 
   for(int i=0; i<range;i++)
@@ -556,24 +594,61 @@ void Hydrophone::filter(float Fs)
 int main()
 {
   char* filename = "../pinger_data/l90.txt";
-  Pair p1;
-    if(p1.readFile(filename))
+  ifstream file;
+  std::complex<float> temp;
+  file.open(filename);
+
+
+  if(file.is_open())
+  {
+    double Fs;
+    file>>Fs;
+    Pair p1(Fs);
+    cout<<Fs<<endl;
+    char choice = 'n';
+
+    while(!file.eof())
     {
-      cout<<"data read from file successfully"<<endl;
+      float data;
+      double delay =0;
+      long int arr1[datasize];
+      long int arr2[datasize];
+
+      for(int i=0;i<datasize;i++)
+      {
+        file>>data;
+        arr1[i] = data;
+
+        file>>data;
+        arr2[i] = data;
+      }
+
+      delay = p1.delay_modified(arr1,arr2,datasize);
+      cout<<delay<<endl;
+      if (delay == 101)
+      {
+        cout<<"Data could not be flushed";
+      }
+
+      cout<<"enter y to continue:";
+      cin>>choice;
+
+      if(choice == 'y')
+        continue;
+      else
+        break;
     }
-    else
-    cout<<"file couldnot be read"<<endl;
 
-    if(p1.getData())//this runs the ADC interface code to read the data;
-    {
-      cout<<"data read for both hyd\n";
-    }
-    else
-      cout<<"data was not read\n";
+    cout<<"file closed"<<endl;
+    file.close();
 
-    double delay;
-    delay = p1.delay();
-
+    return true;
+  }
+  else
+  {
+    cout<<"file didnt open"<<endl;
+    return false;
+  }
 
 return 0;
 }

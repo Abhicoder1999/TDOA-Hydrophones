@@ -56,17 +56,6 @@ CMAKE_BINARY_DIR = /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -77,6 +66,17 @@ edit_cache:
 edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -109,6 +109,19 @@ preinstall/fast:
 depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
+
+#=============================================================================
+# Target rules for targets named rtdoa
+
+# Build rule for target.
+rtdoa: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rtdoa
+.PHONY : rtdoa
+
+# fast build rule for target.
+rtdoa/fast:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/build
+.PHONY : rtdoa/fast
 
 #=============================================================================
 # Target rules for targets named server
@@ -203,6 +216,33 @@ src/debug.cpp.s:
 	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.s
 .PHONY : src/debug.cpp.s
 
+src/rtdoa.o: src/rtdoa.cpp.o
+
+.PHONY : src/rtdoa.o
+
+# target to build an object file
+src/rtdoa.cpp.o:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/rtdoa.cpp.o
+.PHONY : src/rtdoa.cpp.o
+
+src/rtdoa.i: src/rtdoa.cpp.i
+
+.PHONY : src/rtdoa.i
+
+# target to preprocess a source file
+src/rtdoa.cpp.i:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/rtdoa.cpp.i
+.PHONY : src/rtdoa.cpp.i
+
+src/rtdoa.s: src/rtdoa.cpp.s
+
+.PHONY : src/rtdoa.s
+
+# target to generate assembly for a file
+src/rtdoa.cpp.s:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/rtdoa.cpp.s
+.PHONY : src/rtdoa.cpp.s
+
 src/server.o: src/server.cpp.o
 
 .PHONY : src/server.o
@@ -263,8 +303,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... rebuild_cache"
+	@echo "... rtdoa"
 	@echo "... server"
 	@echo "... debug"
 	@echo "... tdoa"
@@ -274,6 +315,9 @@ help:
 	@echo "... src/debug.o"
 	@echo "... src/debug.i"
 	@echo "... src/debug.s"
+	@echo "... src/rtdoa.o"
+	@echo "... src/rtdoa.i"
+	@echo "... src/rtdoa.s"
 	@echo "... src/server.o"
 	@echo "... src/server.i"
 	@echo "... src/server.s"
