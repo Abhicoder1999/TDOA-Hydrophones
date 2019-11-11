@@ -1,11 +1,5 @@
 
 
-3. add the smooth function
-4. add fft,ifft,read/write File functions to Util.h && change everything to bool type for error corrections
-5. make the system parameters more accesible easy for robosub changes (Make a class if possible Parameters)
+add the qt node part for display
+multi-thread the code for pi
 
-7. add the qt node part for display
-8. real time analysis and code ask rishab bhai
-9. multi-thread the code for pi
-10. complete all above before 20 ..!! XD
-asadfasdfasdfasdf

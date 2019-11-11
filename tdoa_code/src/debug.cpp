@@ -552,6 +552,7 @@ void Hydrophone::filter(float Fs)
 
 }
 
+/////////////////////MAIN FUNCTION///////////////////////
 int main()
 {
   char* filename = "../pinger_data/l90.txt";
