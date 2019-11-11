@@ -3,7 +3,8 @@
 #include"../src/Util.cpp"
 ////////////////////PARAMETERS//////////////////
 
-long int datasize = 1000; // the no of datas you want
+long int datasize = 5000;
+// choose datasize such t = timeperiod of ping + T/2
 //time of data you want can be changed by changing datasize length
 int flt_freq = 40000;
 // filtering frequency
@@ -12,7 +13,7 @@ int flt_freq = 40000;
 int best_pings = 1;
 // set this on the basis of the pings you get after visualising it
 
-int range = 50000;
+int range = 200;
 // the average of largest (in time domain) are taken for ping thresholding
 //change the value to change the thresholding value (displayed in output too)
 
@@ -165,6 +166,44 @@ bool Pair::readFile(char* filename)
   }
 }
 
+int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2)
+{
+  std::complex<float>* input1 = x1.data();
+  std::complex<float>* output1 = new std::complex<float>[x1.size()];
+  fftplan fft1 = fft_create_plan(x1.size(),reinterpret_cast<liquid_float_complex*>(input1),reinterpret_cast<liquid_float_complex*>(output1), LIQUID_FFT_FORWARD, 0);
+  fft_execute(fft1);
+  fft_destroy_plan(fft1);
+
+  std::complex<float>* input2 = x2.data();
+  std::complex<float>* output2 = new std::complex<float>[x2.size()];
+  fftplan fft2 = fft_create_plan(x2.size(),reinterpret_cast<liquid_float_complex*>(input2),reinterpret_cast<liquid_float_complex*>(output2), LIQUID_FFT_FORWARD, 0);
+  fft_execute(fft2);
+  fft_destroy_plan(fft2);
+
+  vector< complex<float> > c;
+
+
+  for(int i=0;i<x1.size();i++)
+  {
+    c.push_back((*output1++)*conj((*output2++)));
+  }
+
+  std::complex<float>* input3 = c.data();
+  std::complex<float>* output3 = new std::complex<float>[c.size()];
+  fftplan ifft = fft_create_plan(c.size(),reinterpret_cast<liquid_float_complex*>(input3),reinterpret_cast<liquid_float_complex*>(output3), LIQUID_FFT_BACKWARD, 0);
+  fft_execute(ifft);
+
+  vector<float> tc;
+  for(int i=0; i<c.size(); i++)
+    tc.push_back(abs(*output3++));
+
+
+  rotate(tc.begin(),tc.begin() + (tc.size()/2),tc.end());
+  int late = std::max_element(tc.begin(),tc.end()) - tc.begin() - tc.size()/2;
+  return late;
+
+}
+
 int Pair::correlation(vector< complex<float> > x1, vector< complex<float> > x2,ofstream& file)
 {
 
@@ -278,7 +317,7 @@ double Pair::delay()
     // h1.writeFile(3,"../plots/h1fall.txt");
     // h1.writeFile(4,"../plots/h1peaks.txt");
     double delay = 0;
-    int win = 20000;
+    int win = datasize/100;
 
     vector< vector< complex<float> > > v1;
     ofstream file1("../plots/h1working.txt");
@@ -331,6 +370,26 @@ double Pair::delay()
 
 }
 /////////////////////HYD-FUN//////////////////////////
+vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
+  {    // cout<<filename<<" ";
+
+      std::vector<float> v;
+      complex<float> temp;
+      vector< complex<float> > subVec;
+
+      for(int i=0; i<len;i++)
+      {
+        v.push_back(abs(tdata.at(x-floor(len/2)+i)));
+        temp = v.at(i);
+        subVec.push_back(temp);
+      }
+      cout<<"peak extracted for:"<<x<<endl;
+      // writeFile(v,file);
+
+  return subVec;
+}
+
+
 vector< complex<float> >  Hydrophone::peakExtraction(int x, int len,ofstream& file)
   {    // cout<<filename<<" ";
 
