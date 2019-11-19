@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include <QPixmap>
 #include <QTimer>
-#include <hydrophones/qcustomplot.h>
+#include <qcustomplot.h>
 
 namespace Ui {
 class Hydrophones;

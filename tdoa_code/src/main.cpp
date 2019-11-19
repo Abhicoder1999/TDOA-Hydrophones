@@ -1,4 +1,4 @@
-#include "hydrophones/hydrophones.h"
+#include "hydrophones.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]) {

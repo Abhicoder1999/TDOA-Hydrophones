@@ -1,4 +1,4 @@
-#include "hydrophones/hydrophones.h"
+#include "hydrophones.h"
 #include "ui_hydrophones.h"
 
 Hydrophones::Hydrophones(QWidget *parent)
