@@ -1,6 +1,6 @@
 
 #include"tdoa.h"
-#include"../src/Util.cpp"
+#include"Util.h"
 ////////////////////PARAMETERS//////////////////
 
 long int datasize = 5000;

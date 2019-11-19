@@ -1,6 +1,6 @@
 
 #include"tdoa.h"
-#include"../src/Util.cpp"
+#include"Util.h"
 ////////////////////PARAMETERS//////////////////
 
 long int datasize = 1000000; // the no of datas you want
@@ -9,7 +9,7 @@ int flt_freq = 40000;
 // filtering frequency
 //check line 507 to set another frequency filter if you
 //find 2 peaks in the spectrum then set freq1 & freq2
-int best_pings = 3;
+int best_pings = 7;
 // set this on the basis of the pings you get after visualising it
 
 // and remember you are getting delay not the angle

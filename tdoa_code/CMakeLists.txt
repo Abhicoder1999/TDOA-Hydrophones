@@ -3,15 +3,18 @@ project(tdoa_code)
 
 add_compile_options("-fpermissive")
 
+
+############### FOR TDOA #################
 link_directories(/usr/local/lib/libliquid.so)
 link_directories(/usr/local/lib/libbcm2835.a)
 link_directories(/usr/lib)
 include_directories(include)
 
 add_library(tdoa include/Util.h include/tdoa.h src/tdoa.cpp src/Util.cpp)
-add_executable(server src/server.cpp)
-add_executable(debug src/debug.cpp)
-add_executable(rtdoa src/rtdoa.cpp)
+
+add_executable(server src/server.cpp src/Util.cpp)
+add_executable(debug src/debug.cpp src/Util.cpp)
+add_executable(rtdoa src/rtdoa.cpp src/Util.cpp)
 
 #file(GLOB SOURCES "src/*.cpp")
 #add_executable(exe ${SOURCES})

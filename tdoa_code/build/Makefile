@@ -168,6 +168,9 @@ src/Util.o: src/Util.cpp.o
 
 # target to build an object file
 src/Util.cpp.o:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.o
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.o
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.o
 	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.o
 .PHONY : src/Util.cpp.o
 
@@ -177,6 +180,9 @@ src/Util.i: src/Util.cpp.i
 
 # target to preprocess a source file
 src/Util.cpp.i:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.i
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.i
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.i
 	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.i
 .PHONY : src/Util.cpp.i
 
@@ -186,6 +192,9 @@ src/Util.s: src/Util.cpp.s
 
 # target to generate assembly for a file
 src/Util.cpp.s:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.s
+	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.s
+	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.s
 	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.s
 .PHONY : src/Util.cpp.s
 
