@@ -970,6 +970,9 @@ tdoa_code_BINARY_DIR:STATIC=/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/bu
 //Value Computed by CMake
 tdoa_code_SOURCE_DIR:STATIC=/home/abhijeet/Project/TDOA-Hydrophones/tdoa_code
 
+//Dependencies for the target
+tdoa_lib_LIB_DEPENDS:STATIC=general;/usr/lib/x86_64-linux-gnu/libQtGui.so;general;/usr/lib/x86_64-linux-gnu/libQtCore.so;
+
 
 ########################
 # INTERNAL cache entries

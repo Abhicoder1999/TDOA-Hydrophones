@@ -56,6 +56,18 @@ CMAKE_BINARY_DIR = /home/abhijeet/Project/TDOA-Hydrophones/tdoa_code/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target install
+install: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -P cmake_install.cmake
+.PHONY : install
+
+# Special rule for the target install
+install/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -P cmake_install.cmake
+.PHONY : install/fast
+
 # Special rule for the target install/strip
 install/strip: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
@@ -68,17 +80,26 @@ install/strip/fast: preinstall/fast
 	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
 .PHONY : install/strip/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
+# Special rule for the target list_install_components
+list_install_components:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
+.PHONY : list_install_components
 
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
+# Special rule for the target list_install_components
+list_install_components/fast: list_install_components
+
+.PHONY : list_install_components/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # Special rule for the target test
 test:
@@ -102,38 +123,17 @@ edit_cache/fast: edit_cache
 
 .PHONY : edit_cache/fast
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
+# Special rule for the target install/local
+install/local: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local
 
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
+# Special rule for the target install/local
+install/local/fast: preinstall/fast
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
+	/home/abhijeet/.local/lib/python2.7/site-packages/cmake/data/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+.PHONY : install/local/fast
 
 # The main all target
 all: cmake_check_build_system
@@ -168,173 +168,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named std_msgs_generate_messages_lisp
+# Target rules for targets named rtdoa
 
 # Build rule for target.
-std_msgs_generate_messages_lisp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
-.PHONY : std_msgs_generate_messages_lisp
+rtdoa: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 rtdoa
+.PHONY : rtdoa
 
 # fast build rule for target.
-std_msgs_generate_messages_lisp/fast:
-	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make CMakeFiles/std_msgs_generate_messages_lisp.dir/build
-.PHONY : std_msgs_generate_messages_lisp/fast
-
-#=============================================================================
-# Target rules for targets named download_extra_data
-
-# Build rule for target.
-download_extra_data: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 download_extra_data
-.PHONY : download_extra_data
-
-# fast build rule for target.
-download_extra_data/fast:
-	$(MAKE) -f CMakeFiles/download_extra_data.dir/build.make CMakeFiles/download_extra_data.dir/build
-.PHONY : download_extra_data/fast
-
-#=============================================================================
-# Target rules for targets named tdoa
-
-# Build rule for target.
-tdoa: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 tdoa
-.PHONY : tdoa
-
-# fast build rule for target.
-tdoa/fast:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/build
-.PHONY : tdoa/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_eus
-
-# Build rule for target.
-std_msgs_generate_messages_eus: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_eus
-.PHONY : std_msgs_generate_messages_eus
-
-# fast build rule for target.
-std_msgs_generate_messages_eus/fast:
-	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_eus.dir/build.make CMakeFiles/std_msgs_generate_messages_eus.dir/build
-.PHONY : std_msgs_generate_messages_eus/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_cpp
-
-# Build rule for target.
-std_msgs_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_cpp
-.PHONY : std_msgs_generate_messages_cpp
-
-# fast build rule for target.
-std_msgs_generate_messages_cpp/fast:
-	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make CMakeFiles/std_msgs_generate_messages_cpp.dir/build
-.PHONY : std_msgs_generate_messages_cpp/fast
-
-#=============================================================================
-# Target rules for targets named server
-
-# Build rule for target.
-server: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 server
-.PHONY : server
-
-# fast build rule for target.
-server/fast:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
-.PHONY : server/fast
-
-#=============================================================================
-# Target rules for targets named clean_test_results
-
-# Build rule for target.
-clean_test_results: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 clean_test_results
-.PHONY : clean_test_results
-
-# fast build rule for target.
-clean_test_results/fast:
-	$(MAKE) -f CMakeFiles/clean_test_results.dir/build.make CMakeFiles/clean_test_results.dir/build
-.PHONY : clean_test_results/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_nodejs
-
-# Build rule for target.
-std_msgs_generate_messages_nodejs: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_nodejs
-.PHONY : std_msgs_generate_messages_nodejs
-
-# fast build rule for target.
-std_msgs_generate_messages_nodejs/fast:
-	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
-.PHONY : std_msgs_generate_messages_nodejs/fast
-
-#=============================================================================
-# Target rules for targets named tests
-
-# Build rule for target.
-tests: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 tests
-.PHONY : tests
-
-# fast build rule for target.
-tests/fast:
-	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
-.PHONY : tests/fast
-
-#=============================================================================
-# Target rules for targets named std_msgs_generate_messages_py
-
-# Build rule for target.
-std_msgs_generate_messages_py: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_py
-.PHONY : std_msgs_generate_messages_py
-
-# fast build rule for target.
-std_msgs_generate_messages_py/fast:
-	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_py.dir/build.make CMakeFiles/std_msgs_generate_messages_py.dir/build
-.PHONY : std_msgs_generate_messages_py/fast
-
-#=============================================================================
-# Target rules for targets named doxygen
-
-# Build rule for target.
-doxygen: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 doxygen
-.PHONY : doxygen
-
-# fast build rule for target.
-doxygen/fast:
-	$(MAKE) -f CMakeFiles/doxygen.dir/build.make CMakeFiles/doxygen.dir/build
-.PHONY : doxygen/fast
-
-#=============================================================================
-# Target rules for targets named run_tests
-
-# Build rule for target.
-run_tests: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 run_tests
-.PHONY : run_tests
-
-# fast build rule for target.
-run_tests/fast:
-	$(MAKE) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
-.PHONY : run_tests/fast
-
-#=============================================================================
-# Target rules for targets named hydrophones_lib
-
-# Build rule for target.
-hydrophones_lib: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 hydrophones_lib
-.PHONY : hydrophones_lib
-
-# fast build rule for target.
-hydrophones_lib/fast:
-	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/build
-.PHONY : hydrophones_lib/fast
+rtdoa/fast:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/build
+.PHONY : rtdoa/fast
 
 #=============================================================================
 # Target rules for targets named hydrophones
@@ -350,30 +194,160 @@ hydrophones/fast:
 .PHONY : hydrophones/fast
 
 #=============================================================================
-# Target rules for targets named debug
+# Target rules for targets named tdoa_lib
 
 # Build rule for target.
-debug: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 debug
-.PHONY : debug
+tdoa_lib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tdoa_lib
+.PHONY : tdoa_lib
 
 # fast build rule for target.
-debug/fast:
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/build
-.PHONY : debug/fast
+tdoa_lib/fast:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/build
+.PHONY : tdoa_lib/fast
 
 #=============================================================================
-# Target rules for targets named rtdoa
+# Target rules for targets named hydrophones_lib
 
 # Build rule for target.
-rtdoa: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rtdoa
-.PHONY : rtdoa
+hydrophones_lib: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hydrophones_lib
+.PHONY : hydrophones_lib
 
 # fast build rule for target.
-rtdoa/fast:
-	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/build
-.PHONY : rtdoa/fast
+hydrophones_lib/fast:
+	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/build
+.PHONY : hydrophones_lib/fast
+
+#=============================================================================
+# Target rules for targets named run_tests
+
+# Build rule for target.
+run_tests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 run_tests
+.PHONY : run_tests
+
+# fast build rule for target.
+run_tests/fast:
+	$(MAKE) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
+.PHONY : run_tests/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_py
+
+# Build rule for target.
+std_msgs_generate_messages_py: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_py
+.PHONY : std_msgs_generate_messages_py
+
+# fast build rule for target.
+std_msgs_generate_messages_py/fast:
+	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_py.dir/build.make CMakeFiles/std_msgs_generate_messages_py.dir/build
+.PHONY : std_msgs_generate_messages_py/fast
+
+#=============================================================================
+# Target rules for targets named tests
+
+# Build rule for target.
+tests: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 tests
+.PHONY : tests
+
+# fast build rule for target.
+tests/fast:
+	$(MAKE) -f CMakeFiles/tests.dir/build.make CMakeFiles/tests.dir/build
+.PHONY : tests/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_nodejs
+
+# Build rule for target.
+std_msgs_generate_messages_nodejs: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_nodejs
+.PHONY : std_msgs_generate_messages_nodejs
+
+# fast build rule for target.
+std_msgs_generate_messages_nodejs/fast:
+	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_nodejs.dir/build.make CMakeFiles/std_msgs_generate_messages_nodejs.dir/build
+.PHONY : std_msgs_generate_messages_nodejs/fast
+
+#=============================================================================
+# Target rules for targets named clean_test_results
+
+# Build rule for target.
+clean_test_results: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 clean_test_results
+.PHONY : clean_test_results
+
+# fast build rule for target.
+clean_test_results/fast:
+	$(MAKE) -f CMakeFiles/clean_test_results.dir/build.make CMakeFiles/clean_test_results.dir/build
+.PHONY : clean_test_results/fast
+
+#=============================================================================
+# Target rules for targets named doxygen
+
+# Build rule for target.
+doxygen: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 doxygen
+.PHONY : doxygen
+
+# fast build rule for target.
+doxygen/fast:
+	$(MAKE) -f CMakeFiles/doxygen.dir/build.make CMakeFiles/doxygen.dir/build
+.PHONY : doxygen/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_cpp
+
+# Build rule for target.
+std_msgs_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_cpp
+.PHONY : std_msgs_generate_messages_cpp
+
+# fast build rule for target.
+std_msgs_generate_messages_cpp/fast:
+	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_cpp.dir/build.make CMakeFiles/std_msgs_generate_messages_cpp.dir/build
+.PHONY : std_msgs_generate_messages_cpp/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_eus
+
+# Build rule for target.
+std_msgs_generate_messages_eus: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_eus
+.PHONY : std_msgs_generate_messages_eus
+
+# fast build rule for target.
+std_msgs_generate_messages_eus/fast:
+	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_eus.dir/build.make CMakeFiles/std_msgs_generate_messages_eus.dir/build
+.PHONY : std_msgs_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named download_extra_data
+
+# Build rule for target.
+download_extra_data: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 download_extra_data
+.PHONY : download_extra_data
+
+# fast build rule for target.
+download_extra_data/fast:
+	$(MAKE) -f CMakeFiles/download_extra_data.dir/build.make CMakeFiles/download_extra_data.dir/build
+.PHONY : download_extra_data/fast
+
+#=============================================================================
+# Target rules for targets named std_msgs_generate_messages_lisp
+
+# Build rule for target.
+std_msgs_generate_messages_lisp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 std_msgs_generate_messages_lisp
+.PHONY : std_msgs_generate_messages_lisp
+
+# fast build rule for target.
+std_msgs_generate_messages_lisp/fast:
+	$(MAKE) -f CMakeFiles/std_msgs_generate_messages_lisp.dir/build.make CMakeFiles/std_msgs_generate_messages_lisp.dir/build
+.PHONY : std_msgs_generate_messages_lisp/fast
 
 #=============================================================================
 # Target rules for targets named gmock_main
@@ -433,6 +407,7 @@ include/moc_hydrophones.o: include/moc_hydrophones.cxx.o
 
 # target to build an object file
 include/moc_hydrophones.cxx.o:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_hydrophones.cxx.o
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_hydrophones.cxx.o
 .PHONY : include/moc_hydrophones.cxx.o
 
@@ -442,6 +417,7 @@ include/moc_hydrophones.i: include/moc_hydrophones.cxx.i
 
 # target to preprocess a source file
 include/moc_hydrophones.cxx.i:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_hydrophones.cxx.i
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_hydrophones.cxx.i
 .PHONY : include/moc_hydrophones.cxx.i
 
@@ -451,6 +427,7 @@ include/moc_hydrophones.s: include/moc_hydrophones.cxx.s
 
 # target to generate assembly for a file
 include/moc_hydrophones.cxx.s:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_hydrophones.cxx.s
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_hydrophones.cxx.s
 .PHONY : include/moc_hydrophones.cxx.s
 
@@ -460,6 +437,7 @@ include/moc_qcustomplot.o: include/moc_qcustomplot.cxx.o
 
 # target to build an object file
 include/moc_qcustomplot.cxx.o:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_qcustomplot.cxx.o
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_qcustomplot.cxx.o
 .PHONY : include/moc_qcustomplot.cxx.o
 
@@ -469,6 +447,7 @@ include/moc_qcustomplot.i: include/moc_qcustomplot.cxx.i
 
 # target to preprocess a source file
 include/moc_qcustomplot.cxx.i:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_qcustomplot.cxx.i
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_qcustomplot.cxx.i
 .PHONY : include/moc_qcustomplot.cxx.i
 
@@ -478,6 +457,7 @@ include/moc_qcustomplot.s: include/moc_qcustomplot.cxx.s
 
 # target to generate assembly for a file
 include/moc_qcustomplot.cxx.s:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/include/moc_qcustomplot.cxx.s
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/include/moc_qcustomplot.cxx.s
 .PHONY : include/moc_qcustomplot.cxx.s
 
@@ -487,10 +467,8 @@ src/Util.o: src/Util.cpp.o
 
 # target to build an object file
 src/Util.cpp.o:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.o
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.o
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.o
 	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.o
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/Util.cpp.o
 .PHONY : src/Util.cpp.o
 
 src/Util.i: src/Util.cpp.i
@@ -499,10 +477,8 @@ src/Util.i: src/Util.cpp.i
 
 # target to preprocess a source file
 src/Util.cpp.i:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.i
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.i
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.i
 	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.i
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/Util.cpp.i
 .PHONY : src/Util.cpp.i
 
 src/Util.s: src/Util.cpp.s
@@ -511,38 +487,9 @@ src/Util.s: src/Util.cpp.s
 
 # target to generate assembly for a file
 src/Util.cpp.s:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/Util.cpp.s
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/Util.cpp.s
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/Util.cpp.s
 	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/Util.cpp.s
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/Util.cpp.s
 .PHONY : src/Util.cpp.s
-
-src/debug.o: src/debug.cpp.o
-
-.PHONY : src/debug.o
-
-# target to build an object file
-src/debug.cpp.o:
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.o
-.PHONY : src/debug.cpp.o
-
-src/debug.i: src/debug.cpp.i
-
-.PHONY : src/debug.i
-
-# target to preprocess a source file
-src/debug.cpp.i:
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.i
-.PHONY : src/debug.cpp.i
-
-src/debug.s: src/debug.cpp.s
-
-.PHONY : src/debug.s
-
-# target to generate assembly for a file
-src/debug.cpp.s:
-	$(MAKE) -f CMakeFiles/debug.dir/build.make CMakeFiles/debug.dir/src/debug.cpp.s
-.PHONY : src/debug.cpp.s
 
 src/hydrophones.o: src/hydrophones.cpp.o
 
@@ -550,6 +497,8 @@ src/hydrophones.o: src/hydrophones.cpp.o
 
 # target to build an object file
 src/hydrophones.cpp.o:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/hydrophones.cpp.o
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/hydrophones.cpp.o
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/hydrophones.cpp.o
 .PHONY : src/hydrophones.cpp.o
 
@@ -559,6 +508,8 @@ src/hydrophones.i: src/hydrophones.cpp.i
 
 # target to preprocess a source file
 src/hydrophones.cpp.i:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/hydrophones.cpp.i
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/hydrophones.cpp.i
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/hydrophones.cpp.i
 .PHONY : src/hydrophones.cpp.i
 
@@ -568,6 +519,8 @@ src/hydrophones.s: src/hydrophones.cpp.s
 
 # target to generate assembly for a file
 src/hydrophones.cpp.s:
+	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/hydrophones.cpp.s
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/hydrophones.cpp.s
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/hydrophones.cpp.s
 .PHONY : src/hydrophones.cpp.s
 
@@ -604,6 +557,7 @@ src/qcustomplot.o: src/qcustomplot.cpp.o
 
 # target to build an object file
 src/qcustomplot.cpp.o:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/qcustomplot.cpp.o
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/qcustomplot.cpp.o
 .PHONY : src/qcustomplot.cpp.o
 
@@ -613,6 +567,7 @@ src/qcustomplot.i: src/qcustomplot.cpp.i
 
 # target to preprocess a source file
 src/qcustomplot.cpp.i:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/qcustomplot.cpp.i
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/qcustomplot.cpp.i
 .PHONY : src/qcustomplot.cpp.i
 
@@ -622,6 +577,7 @@ src/qcustomplot.s: src/qcustomplot.cpp.s
 
 # target to generate assembly for a file
 src/qcustomplot.cpp.s:
+	$(MAKE) -f CMakeFiles/tdoa_lib.dir/build.make CMakeFiles/tdoa_lib.dir/src/qcustomplot.cpp.s
 	$(MAKE) -f CMakeFiles/hydrophones_lib.dir/build.make CMakeFiles/hydrophones_lib.dir/src/qcustomplot.cpp.s
 .PHONY : src/qcustomplot.cpp.s
 
@@ -652,89 +608,33 @@ src/rtdoa.cpp.s:
 	$(MAKE) -f CMakeFiles/rtdoa.dir/build.make CMakeFiles/rtdoa.dir/src/rtdoa.cpp.s
 .PHONY : src/rtdoa.cpp.s
 
-src/server.o: src/server.cpp.o
-
-.PHONY : src/server.o
-
-# target to build an object file
-src/server.cpp.o:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.o
-.PHONY : src/server.cpp.o
-
-src/server.i: src/server.cpp.i
-
-.PHONY : src/server.i
-
-# target to preprocess a source file
-src/server.cpp.i:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.i
-.PHONY : src/server.cpp.i
-
-src/server.s: src/server.cpp.s
-
-.PHONY : src/server.s
-
-# target to generate assembly for a file
-src/server.cpp.s:
-	$(MAKE) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/src/server.cpp.s
-.PHONY : src/server.cpp.s
-
-src/tdoa.o: src/tdoa.cpp.o
-
-.PHONY : src/tdoa.o
-
-# target to build an object file
-src/tdoa.cpp.o:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.o
-.PHONY : src/tdoa.cpp.o
-
-src/tdoa.i: src/tdoa.cpp.i
-
-.PHONY : src/tdoa.i
-
-# target to preprocess a source file
-src/tdoa.cpp.i:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.i
-.PHONY : src/tdoa.cpp.i
-
-src/tdoa.s: src/tdoa.cpp.s
-
-.PHONY : src/tdoa.s
-
-# target to generate assembly for a file
-src/tdoa.cpp.s:
-	$(MAKE) -f CMakeFiles/tdoa.dir/build.make CMakeFiles/tdoa.dir/src/tdoa.cpp.s
-.PHONY : src/tdoa.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... std_msgs_generate_messages_lisp"
-	@echo "... download_extra_data"
-	@echo "... tdoa"
-	@echo "... std_msgs_generate_messages_eus"
-	@echo "... std_msgs_generate_messages_cpp"
-	@echo "... server"
-	@echo "... clean_test_results"
-	@echo "... std_msgs_generate_messages_nodejs"
-	@echo "... tests"
-	@echo "... std_msgs_generate_messages_py"
-	@echo "... doxygen"
-	@echo "... run_tests"
-	@echo "... hydrophones_lib"
-	@echo "... hydrophones"
-	@echo "... install/local"
-	@echo "... debug"
-	@echo "... test"
-	@echo "... rtdoa"
-	@echo "... edit_cache"
-	@echo "... rebuild_cache"
-	@echo "... list_install_components"
 	@echo "... install"
+	@echo "... install/strip"
+	@echo "... list_install_components"
+	@echo "... rebuild_cache"
+	@echo "... test"
+	@echo "... edit_cache"
+	@echo "... rtdoa"
+	@echo "... install/local"
+	@echo "... hydrophones"
+	@echo "... tdoa_lib"
+	@echo "... hydrophones_lib"
+	@echo "... run_tests"
+	@echo "... std_msgs_generate_messages_py"
+	@echo "... tests"
+	@echo "... std_msgs_generate_messages_nodejs"
+	@echo "... clean_test_results"
+	@echo "... doxygen"
+	@echo "... std_msgs_generate_messages_cpp"
+	@echo "... std_msgs_generate_messages_eus"
+	@echo "... download_extra_data"
+	@echo "... std_msgs_generate_messages_lisp"
 	@echo "... gmock_main"
 	@echo "... gmock"
 	@echo "... gtest_main"
@@ -748,9 +648,6 @@ help:
 	@echo "... src/Util.o"
 	@echo "... src/Util.i"
 	@echo "... src/Util.s"
-	@echo "... src/debug.o"
-	@echo "... src/debug.i"
-	@echo "... src/debug.s"
 	@echo "... src/hydrophones.o"
 	@echo "... src/hydrophones.i"
 	@echo "... src/hydrophones.s"
@@ -763,12 +660,6 @@ help:
 	@echo "... src/rtdoa.o"
 	@echo "... src/rtdoa.i"
 	@echo "... src/rtdoa.s"
-	@echo "... src/server.o"
-	@echo "... src/server.i"
-	@echo "... src/server.s"
-	@echo "... src/tdoa.o"
-	@echo "... src/tdoa.i"
-	@echo "... src/tdoa.s"
 .PHONY : help
 
 

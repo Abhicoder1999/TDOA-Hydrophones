@@ -17,11 +17,6 @@ class Hydrophones : public QMainWindow {
 public:
   explicit Hydrophones(QWidget *parent = 0);
   ~Hydrophones();
-
-private:
-  Ui::Hydrophones *ui;
-  int Range_tdata, Range_fdata, Range_segment, Range_correlation;
-
   void plotTdata(double arr[], int time[], int length);
   void plotFdata(double arr[], int time[], int length);
   void plotSegment(double arr[], int time[], int length);
@@ -31,6 +26,12 @@ private:
   void resetGraphSegment();
   void resetGraphCorrelation();
   void resetGraphAll();
+
+private:
+  Ui::Hydrophones *ui;
+  int Range_tdata, Range_fdata, Range_segment, Range_correlation;
+
+
 };
 
 #endif // HYDROPHONES_H

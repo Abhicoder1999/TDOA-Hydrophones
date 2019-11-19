@@ -1,6 +1,7 @@
 
 #include"tdoa.h"
 #include"Util.h"
+#include"hydrophones.h"
 ////////////////////PARAMETERS//////////////////
 
 long int datasize = 5000;
@@ -650,8 +651,12 @@ void Hydrophone::filter(float Fs)
 }
 
 /////////////////////MAIN FUNCTION///////////////////////
-int main()
+int main(int argc, char** argv)
 {
+ QApplication a(argc, argv);
+ Hydrophones h;
+
+
   char* filename = "../pinger_data/l90.txt";
   ifstream file;
   std::complex<float> temp;
@@ -670,9 +675,9 @@ int main()
     {
       float data;
       double delay =0;
-      long int arr1[datasize];
-      long int arr2[datasize];
-
+      double arr1[datasize];
+      double arr2[datasize];
+      int time_plot[datasize];
       for(int i=0;i<datasize;i++)
       {
         file>>data;
@@ -680,14 +685,18 @@ int main()
 
         file>>data;
         arr2[i] = data;
+
+        time_plot[i] = (i);
       }
 
-      delay = p1.delay_modified(arr1,arr2,datasize);
-      cout<<delay<<endl;
-      if (delay == 101)
-      {
-        cout<<"Data could not be flushed";
-      }
+     h.plotTdata(arr1,time_plot,datasize);
+
+      // delay = p1.delay_modified(arr1,arr2,datasize);
+      // cout<<delay<<endl;
+      // if (delay == 101)
+      // {
+      //   cout<<"Data could not be flushed";
+      // }
 
       cout<<"enter y to continue:";
       cin>>choice;
@@ -708,6 +717,6 @@ int main()
     cout<<"file didnt open"<<endl;
     return false;
   }
-
-return 0;
+h.show();
+return 0;// a.exec();
 }
