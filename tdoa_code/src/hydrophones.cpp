@@ -5,6 +5,16 @@ Hydrophones::Hydrophones(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::Hydrophones) {
   ui->setupUi(this);
 
+  ui->tdata->addGraph()->setName("tdata");
+  ui->fdata->addGraph()->setName("fdata");
+  ui->segment->addGraph()->setName("segment");
+  ui->correlation->addGraph()->setName("correlation");
+
+  ui->tdata->graph()->setPen(QPen(Qt::red));
+  ui->fdata->graph()->setPen(QPen(Qt::green));
+  ui->segment->graph()->setPen(QPen(Qt::blue));
+  ui->correlation->graph()->setPen(QPen(Qt::yellow));
+
   ui->tdata->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
   ui->tdata->axisRect()->setRangeZoom(Qt::Horizontal);
   ui->tdata->axisRect()->setRangeZoomFactor(1.5);
@@ -69,15 +79,34 @@ void Hydrophones::plotCorrelation(double arr[], int time[], int length) {
   ui->correlation->replot();
 }
 void Hydrophones::resetGraphAll() {
-  ui->tdata->graph()->data()->clear();
-  ui->fdata->graph()->data()->clear();
-  ui->segment->graph()->data()->clear();
-  ui->correlation->graph()->data()->clear();
+  resetGraphTdata();
+  resetGraphFdata();
+  resetGraphSegment();
+  resetGraphCorrelation();
 }
 
-void Hydrophones::resetGraphTdata() { ui->tdata->graph()->data()->clear(); }
-void Hydrophones::resetGraphFdata() { ui->fdata->graph()->data()->clear(); }
-void Hydrophones::resetGraphSegment() { ui->segment->graph()->data()->clear(); }
+void Hydrophones::resetGraphTdata() {
+  ui->tdata->graph()->data()->clear();
+  ui->tdata->replot();
+  ui->tdata->yAxis->rescale();
+  ui->tdata->replot();
+}
+void Hydrophones::resetGraphFdata() {
+  ui->fdata->graph()->data()->clear();
+  ui->fdata->replot();
+  ui->fdata->yAxis->rescale();
+  ui->fdata->replot();
+}
+void Hydrophones::resetGraphSegment() {
+  ui->segment->graph()->data()->clear();
+  ui->segment->replot();
+  ui->segment->yAxis->rescale();
+  ui->segment->replot();
+}
 void Hydrophones::resetGraphCorrelation() {
   ui->correlation->graph()->data()->clear();
+  ui->correlation->replot();
+  ui->correlation->yAxis->rescale();
+  ui->correlation->replot();
 }
+

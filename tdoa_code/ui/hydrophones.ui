@@ -14,61 +14,6 @@
    <string>Hydrophones</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCustomPlot" name="tdata" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>30</y>
-      <width>461</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCustomPlot" name="fdata" native="true">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>30</y>
-      <width>421</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCustomPlot" name="segment" native="true">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>370</y>
-      <width>461</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCustomPlot" name="correlation" native="true">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>370</y>
-      <width>421</width>
-      <height>311</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="reset_tdata">
     <property name="geometry">
      <rect>
@@ -134,6 +79,51 @@
      <string>Reset All</string>
     </property>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>80</y>
+      <width>901</width>
+      <height>631</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item row="2" column="0">
+      <widget class="QCustomPlot" name="segment" native="true"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCustomPlot" name="tdata" native="true"/>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCustomPlot" name="fdata" native="true"/>
+     </item>
+     <item row="2" column="1">
+      <widget class="QCustomPlot" name="correlation" native="true"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>10</y>
+      <width>611</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>24</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>ABHAYA HYDROPHONE GUI</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -160,7 +150,7 @@
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>
-   <header>watchdog/qcustomplot.h</header>
+   <header location="global">qcustomplot.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

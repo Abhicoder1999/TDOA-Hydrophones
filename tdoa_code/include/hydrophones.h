@@ -21,6 +21,7 @@ public:
   void plotFdata(double arr[], int time[], int length);
   void plotSegment(double arr[], int time[], int length);
   void plotCorrelation(double arr[], int time[], int length);
+public slots:
   void resetGraphTdata();
   void resetGraphFdata();
   void resetGraphSegment();
@@ -30,8 +31,6 @@ public:
 private:
   Ui::Hydrophones *ui;
   int Range_tdata, Range_fdata, Range_segment, Range_correlation;
-
-
 };
 
 #endif // HYDROPHONES_H
