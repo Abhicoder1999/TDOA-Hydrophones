@@ -4,7 +4,7 @@
 Hydrophones::Hydrophones(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::Hydrophones) {
   ui->setupUi(this);
-
+  printf("ander hai");
   ui->tdata->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
   ui->tdata->axisRect()->setRangeZoom(Qt::Horizontal);
   ui->tdata->axisRect()->setRangeZoomFactor(1.5);
@@ -32,11 +32,13 @@ Hydrophones::Hydrophones(QWidget *parent)
   connect(ui->reset_correlation, SIGNAL(pressed()), this,
           SLOT(resetGraphCorrelation()));
   connect(ui->reset_all, SIGNAL(pressed()), this, SLOT(resetGraphAll()));
+  this->show();
 }
 
 Hydrophones::~Hydrophones() { delete ui; }
 
 void Hydrophones::plotTdata(double arr[], int time[], int length) {
+
   for (int i = 0; i < length; i++) {
     ui->tdata->graph()->addData(time[i], arr[i]);
   }

@@ -653,24 +653,28 @@ void Hydrophone::filter(float Fs)
 /////////////////////MAIN FUNCTION///////////////////////
 int main(int argc, char** argv)
 {
- QApplication a(argc, argv);
- Hydrophones h;
-
+  char choice = 'n';
+  printf("abhaya1");
+  QApplication a(argc, argv);
+  Hydrophones h;
+  // h.show();
+  printf("abhaya2");
 
   char* filename = "../pinger_data/l90.txt";
   ifstream file;
   std::complex<float> temp;
   file.open(filename);
 
-
+  printf("abhaya3");
   if(file.is_open())
   {
     double Fs;
     file>>Fs;
     Pair p1(Fs);
-    cout<<Fs<<endl;
-    char choice = 'n';
+    printf("abhaya6");
+    cout<<"\nFs:"<<Fs<<endl;
 
+    printf("abhaya5");
     while(!file.eof())
     {
       float data;
@@ -688,8 +692,8 @@ int main(int argc, char** argv)
 
         time_plot[i] = (i);
       }
-
-     h.plotTdata(arr1,time_plot,datasize);
+      printf("abhaya4");
+     // h.plotTdata(arr1,time_plot,datasize);
 
       // delay = p1.delay_modified(arr1,arr2,datasize);
       // cout<<delay<<endl;
@@ -710,13 +714,13 @@ int main(int argc, char** argv)
     cout<<"file closed"<<endl;
     file.close();
 
-    return true;
+    // return true;
   }
   else
   {
     cout<<"file didnt open"<<endl;
-    return false;
+    // return false;
   }
-h.show();
+
 return 0;// a.exec();
 }
