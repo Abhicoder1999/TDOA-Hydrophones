@@ -3,7 +3,7 @@
 #include"hydrophones.h"
 ////////////////////PARAMETERS//////////////////
 
-long int datasize = 5000;
+long int datasize = 100000;
 // choose datasize such t = timeperiod of ping + T/2
 //time of data you want can be changed by changing datasize length
 int flt_freq = 40000;
@@ -652,35 +652,39 @@ void Hydrophone::filter(float Fs)
 /////////////////////MAIN FUNCTION///////////////////////
 int main(int argc, char** argv)
 {
-  char choice = 'n';
-  printf("abhaya1");
-  QApplication a(argc, argv);
-  Hydrophones h;
-  // h.show();
-  printf("abhaya2");
+ QApplication a(argc, argv);
+ Hydrophones h;
 
   char* filename = "../pinger_data/l90.txt";
   ifstream file;
   std::complex<float> temp;
   file.open(filename);
 
-  printf("abhaya3");
+
   if(file.is_open())
   {
     double Fs;
     file>>Fs;
     Pair p1(Fs);
-    printf("abhaya6");
-    cout<<"\nFs:"<<Fs<<endl;
+    cout<<Fs<<endl;
+    char choice = 'n';
 
-    printf("abhaya5");
     while(!file.eof())
     {
+      h.show();
       float data;
       double delay =0;
       double arr1[datasize];
       double arr2[datasize];
       int time_plot[datasize];
+
+      int begin_ignore = 20000;
+      for(int i=0;i<begin_ignore;i++)
+      {
+        double temp;
+        file>>temp;
+      }
+
       for(int i=0;i<datasize;i++)
       {
         file>>data;
@@ -691,16 +695,16 @@ int main(int argc, char** argv)
 
         time_plot[i] = (i);
       }
-      printf("abhaya4");
-     // h.plotTdata(arr1,time_plot,datasize);
 
+      h.plotTdata(arr1,time_plot,datasize);
+      a.exec();
       // delay = p1.delay_modified(arr1,arr2,datasize);
       // cout<<delay<<endl;
       // if (delay == 101)
       // {
       //   cout<<"Data could not be flushed";
       // }
-
+      h.resetGraphAll();
       cout<<"enter y to continue:";
       cin>>choice;
 
@@ -709,17 +713,11 @@ int main(int argc, char** argv)
       else
         break;
     }
-
     cout<<"file closed"<<endl;
     file.close();
 
-    // return true;
-  }
-  else
-  {
-    cout<<"file didnt open"<<endl;
-    // return false;
   }
 
-return 0;// a.exec();
+
+return 0;
 }
