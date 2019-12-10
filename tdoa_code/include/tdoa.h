@@ -11,6 +11,8 @@
 #include <cstring>
 #include <stdlib.h>
 #include <ctime>
+#include"hydrophones.h"
+#include <qcustomplot.h>
 using namespace std;
 
 
@@ -100,8 +102,8 @@ class Pair: private Hydrophone {
 
       bool getData(long);
       bool readFile(char*);
-      double delay();
-      double delay_modified(long int*,long int*, int);
+      double delay(Hydrophones*);
+      double delay_modified(double*,double*, int, Hydrophones*);
 
 
 };

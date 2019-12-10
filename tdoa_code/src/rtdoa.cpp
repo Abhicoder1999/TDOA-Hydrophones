@@ -261,7 +261,7 @@ void Pair::smooth()
 
 }
 
-double Pair::delay_modified(long int data1[],long int data2[], int n)
+double Pair::delay_modified(double data1[],double data2[], int n, Hydrophones* hgui)
 {
   if(flushData())
   cout<<"data flushing done..!";
@@ -282,18 +282,19 @@ std::complex<float> temp2;
   }
 
   double ans;
-  ans = this->delay();
+  ans = this->delay(hgui);
   return ans;
 
 }
 
-double Pair::delay()
+double Pair::delay(Hydrophones* hgui)
 {
 
     h1.debug(1);
     h2.debug(1);
     // h1.writeFile(1,"../plots/h1t.txt");
     // h2.writeFile(1,"../plots/h2t.txt");
+
 
     h1.calFreq();
     h2.calFreq();
@@ -654,6 +655,7 @@ int main(int argc, char** argv)
 {
  QApplication a(argc, argv);
  Hydrophones h;
+ Hydrophones* hgui = &h;
 
   char* filename = "../pinger_data/l90.txt";
   ifstream file;
@@ -671,7 +673,7 @@ int main(int argc, char** argv)
 
     while(!file.eof())
     {
-      h.show();
+      hgui->show();
       float data;
       double delay =0;
       double arr1[datasize];
@@ -696,15 +698,15 @@ int main(int argc, char** argv)
         time_plot[i] = (i);
       }
 
-      h.plotTdata(arr1,time_plot,datasize);
+      hgui->plotTdata(arr1,time_plot,datasize);
       a.exec();
-      // delay = p1.delay_modified(arr1,arr2,datasize);
+      hgui->resetGraphAll();
+      //delay = p1.delay_modified(arr1,arr2,datasize,hgui);
       // cout<<delay<<endl;
       // if (delay == 101)
       // {
       //   cout<<"Data could not be flushed";
       // }
-      h.resetGraphAll();
       cout<<"enter y to continue:";
       cin>>choice;
 
