@@ -53,6 +53,9 @@ class Hydrophone{
       bool empty()
       {
           tdata.clear();
+          fdata.clear();
+          peaks.clear();
+          pkind.clear();
           return true;
       }
       void peakFinder();//finds the peak of the curve
@@ -61,6 +64,7 @@ class Hydrophone{
       vector< complex<float> >  peakExtraction(int ind,int win);
       void filter(float);
       void debug(int);
+      void debug(int,Hydrophones*,int);
       void writeFile(int,char*);
       void writeFile(vector<float>,ofstream& file);
 

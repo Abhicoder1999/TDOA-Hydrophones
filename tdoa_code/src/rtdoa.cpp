@@ -273,8 +273,10 @@ double Pair::delay_modified(double data1[],double data2[], int n, Hydrophones* h
 std::complex<float> temp1;
 std::complex<float> temp2;
   // h1.empty(); this function will empty if anyting is there prv
+  int time_plot[n];
   for(int i=0;i<n;i++)
   {
+    time_plot[i] = i;
     temp1 = data1[i];
     temp2 = data2[i];
     h1.storeData(temp1);
@@ -283,6 +285,7 @@ std::complex<float> temp2;
 
   double ans;
   ans = this->delay(hgui);
+
   return ans;
 
 }
@@ -290,14 +293,16 @@ std::complex<float> temp2;
 double Pair::delay(Hydrophones* hgui)
 {
 
-    h1.debug(1);
-    h2.debug(1);
+    // h1.debug(1);
+    // h2.debug(1);
+
     // h1.writeFile(1,"../plots/h1t.txt");
     // h2.writeFile(1,"../plots/h2t.txt");
 
-
     h1.calFreq();
     h2.calFreq();
+
+
     // h1.debug(2);
     // h2.debug(2);
 
@@ -306,6 +311,14 @@ double Pair::delay(Hydrophones* hgui)
 
     h1.filter(Fs);
     h2.filter(Fs);
+
+    h1.debug(1,hgui,1);
+    h2.debug(2,hgui,1);
+
+    h1.debug(3,hgui,2);
+    h2.debug(4,hgui,2);
+
+
     // h2.writeFile(2,"../plots/h2filt.txt");
     // h1.writeFile(2,"../plots/h1filt.txt");
 
@@ -321,30 +334,33 @@ double Pair::delay(Hydrophones* hgui)
     int win = datasize/100;
 
     vector< vector< complex<float> > > v1;
-    ofstream file1("../plots/h1working.txt");
-    if(file1.is_open())
-    {
+    // ofstream file1("../plots/h1working.txt");
+    // if(file1.is_open())
+    // {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
+        // v1.push_back(h1.peakExtraction(h1.peaks[i],win,file1));
+        v1.push_back(h1.peakExtraction(h1.peaks[i],win));
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file1.close();
+    // }
+    // else
+    // cout<<"file could not open"<<endl;
+    // file1.close();
 
     vector< vector< complex<float> > > v2;
-    ofstream file2("../plots/h2working.txt");
-    if(file2.is_open())
-    {
+    // ofstream file2("../plots/h2working.txt");
+    // if(file2.is_open())
+    // {
       for(int i=0;i<h1.peaks.size();i++)
       {
-        v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2)); //note here hyd1 peaks are used as better SNR was their
+        // v2.push_back(h2.peakExtraction(h1.peaks[i],win,file2));
+        v2.push_back(h2.peakExtraction(h1.peaks[i],win)); //note here hyd1 peaks are used
       }
-    }
-    else
-    cout<<"file could not open"<<endl;
-    file2.close();
+    // }
+    // else
+    // cout<<"file could not open"<<endl;
+    // file2.close();
+    
     cout<<"both peak extraction done"<<endl;
 
     vector<int> d;
@@ -555,14 +571,11 @@ void Hydrophone::debug(int i)
 {
   if(i == 1)
   {
-    // tdata.pop_back();
-    // cout<<"elements of hyd"<<ID<<": "<<abs(tdata.at(0))<<" "<<abs(tdata.at(1))<<" "<<abs(tdata.at(2))<<" "<<abs(tdata.at(tdata.size()-2))<<" "<<abs(tdata.at(tdata.size()-1))<<" "<<abs(tdata.at(tdata.size()-3))<<endl;
     cout<<"tdata size in hyd"<<ID<<": "<<tdata.size()<<endl;
   }
   if(i == 2)
   {
     cout<<"frq size in hyd"<<ID<<": "<<fdata.size()<<endl;
-    // cout<<"first and last element: "<<abs(fdata.at(0))<<" "<<abs(fdata.at(fdata.size()-1))<<endl;
   }
   if(i == 3)
   {
@@ -578,12 +591,106 @@ void Hydrophone::debug(int i)
 
 }
 
+void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
+{
+
+  int time_plot[datasize];
+  for(int i=0;i<datasize;i++){time_plot[i]=i;}
+  if (choice == 1)
+  {
+
+    if(i == 1)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotTdata(temp,time_plot,datasize);
+    }
+    if(i == 2)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotFdata(temp,time_plot,datasize);
+    }
+    if(i == 3)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotSegment(temp,time_plot,datasize);
+    }
+    if(i == 4)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotCorrelation(temp,time_plot,datasize);
+    }
+  }
+
+  if (choice == 2)
+  {
+
+    if(i == 1)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotTdata(temp,time_plot,datasize);
+    }
+    if(i == 2)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotFdata(temp,time_plot,datasize);
+    }
+    if(i == 3)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotSegment(temp,time_plot,datasize);
+    }
+    if(i == 4)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotCorrelation(temp,time_plot,datasize);
+    }
+  }
+
+  if (choice == 3)
+  {
+
+    if(i == 1)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotTdata(temp,time_plot,datasize);
+    }
+    if(i == 2)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotFdata(temp,time_plot,datasize);
+    }
+    if(i == 3)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotSegment(temp,time_plot,datasize);
+    }
+    if(i == 4)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotCorrelation(temp,time_plot,datasize);
+    }
+  }
+
+}
+
 
 
 void Hydrophone::calFreq()
 {
   // float complex * y = (float complex*) malloc(tdata.size() * sizeof(float complex));
-  tdata.pop_back();
+  // tdata.pop_back();
   std::complex<float>* input = tdata.data();
   std::complex<float>* output = new std::complex<float>[tdata.size()];
   fftplan fft = fft_create_plan(tdata.size(),reinterpret_cast<liquid_float_complex*>(input),reinterpret_cast<liquid_float_complex*>(output), LIQUID_FFT_FORWARD, 0);
@@ -678,7 +785,6 @@ int main(int argc, char** argv)
       double delay =0;
       double arr1[datasize];
       double arr2[datasize];
-      int time_plot[datasize];
 
       int begin_ignore = 20000;
       for(int i=0;i<begin_ignore;i++)
@@ -694,19 +800,20 @@ int main(int argc, char** argv)
 
         file>>data;
         arr2[i] = data;
-
-        time_plot[i] = (i);
       }
 
-      hgui->plotTdata(arr1,time_plot,datasize);
+      // hgui->plotTdata(arr1,time_plot,datasize);
+
+      delay = p1.delay_modified(arr1,arr2,datasize,hgui);
+      cout<<delay<<endl;
+      if (delay == 101)
+      {
+        cout<<"Data could not be flushed/Process interupted\n";
+      }
+
       a.exec();
       hgui->resetGraphAll();
-      //delay = p1.delay_modified(arr1,arr2,datasize,hgui);
-      // cout<<delay<<endl;
-      // if (delay == 101)
-      // {
-      //   cout<<"Data could not be flushed";
-      // }
+
       cout<<"enter y to continue:";
       cin>>choice;
 

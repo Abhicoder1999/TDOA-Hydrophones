@@ -77,3 +77,23 @@ double stdDev(std::vector<int> values)
 		}
 
 }
+
+void convtDouble(vector< complex<float> > v,int datasize, double* data)
+{
+
+	for (int i=0;i<datasize;i++)
+	{
+			data[i] = abs(v.at(i));
+	}
+
+}
+
+void convtDouble(vector<int> v,int datasize, double* data)
+{
+
+	for (int i=0;i<datasize;i++)
+	{
+			data[i] = v.at(i);
+	}
+
+}
