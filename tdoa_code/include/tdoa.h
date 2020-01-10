@@ -67,6 +67,7 @@ class Hydrophone{
       void debug(int,Hydrophones*,int);
       void writeFile(int,char*);
       void writeFile(vector<float>,ofstream& file);
+      float calPower();
 
 };
 
@@ -109,25 +110,43 @@ class Pair: private Hydrophone {
       bool readFile(char*);
       double delay(Hydrophones*);
       double delay_modified(double*,double*, int, Hydrophones*);
-
+      float getPower();
 
 };
 
 int Pair::pair_num = 1;
 
 class Controller{
+
   static int cntrl_num;
-  float peak_time;
+
+public:
+  int ID;
+  float lag;
   int state; // if 1 then reading will be taken if 0 then no reading
   int gui;  // if 1 then display gui if 0 then no gui
-  int mission; // if 37.5khz are executed of 455khz
+  int mission; // if 37.5khz are executed of 45khz
+
+  Controller()
+  {
+    lag = 0;
+    state = 0;
+    gui = 0;
+    mission = 0;
+  }
 
 
-private:
+    Controller(int a,int b,int c)
+    {
+      lag = 0;
+      gui = a;
+      mission = b;
+      state = c;
+    }
+
   bool cntrlDelay(int); // take int btw (0-1)to calculate the delay required foro next ping to stay near center
   // bool sendToServer();
-  // bool readFrom Server();
-
+  // bool readFromServer();
 
 };
 

@@ -1,7 +1,7 @@
 #include"tdoa.h"
 #include"Util.h"
 #include"hydrophones.h"
-////////////////////PARAMETERS//////////////////
+////////////////////PARAMETERS////////////////////////////////////////////////////////////////////////////
 
 long int datasize = 100000;
 // choose datasize such t = timeperiod of ping + T/2
@@ -18,8 +18,11 @@ int range = 200;
 //change the value to change the thresholding value (displayed in output too)
 
 // and remember you are getting delay not the angle
+int init_state = 0; //initial default acquisition state of ADC
+int init_gui = 1; //intial setting for gui
+int init_mission = 0; // initial setting of the missions
 
-/////////////////PAIR_FUN/////////////////////////////////
+/////////////////PAIR_FUN////////////////////////////////////////////////////////////////////////////////
 bool Pair::getData(long len = datasize)
 {
       if(flushData())
@@ -360,7 +363,7 @@ double Pair::delay(Hydrophones* hgui)
     // else
     // cout<<"file could not open"<<endl;
     // file2.close();
-    
+
     cout<<"both peak extraction done"<<endl;
 
     vector<int> d;
@@ -386,7 +389,14 @@ double Pair::delay(Hydrophones* hgui)
     return ans;
 
 }
-/////////////////////HYD-FUN//////////////////////////
+
+float Pair::getPower()
+{
+    float power = 0;
+    power += h1.calPower() + h2.calPower();
+    return power;
+}
+/////////////////////HYD-FUN/////////////////////////////////////////////////////////////////////////////////////////////
 vector< complex<float> >  Hydrophone::peakExtraction(int x, int len)
   {    // cout<<filename<<" ";
 
@@ -757,76 +767,63 @@ void Hydrophone::filter(float Fs)
 
 }
 
-/////////////////////MAIN FUNCTION///////////////////////
-int main(int argc, char** argv)
+float Hydrophone::calPower()
 {
- QApplication a(argc, argv);
- Hydrophones h;
- Hydrophones* hgui = &h;
-
-  char* filename = "../pinger_data/l90.txt";
-  ifstream file;
-  std::complex<float> temp;
-  file.open(filename);
-
-
-  if(file.is_open())
+  if(tdata.size() == 0)
   {
-    double Fs;
-    file>>Fs;
-    Pair p1(Fs);
-    cout<<Fs<<endl;
-    char choice = 'n';
-
-    while(!file.eof())
-    {
-      hgui->show();
-      float data;
-      double delay =0;
-      double arr1[datasize];
-      double arr2[datasize];
-
-      int begin_ignore = 20000;
-      for(int i=0;i<begin_ignore;i++)
-      {
-        double temp;
-        file>>temp;
-      }
-
-      for(int i=0;i<datasize;i++)
-      {
-        file>>data;
-        arr1[i] = data;
-
-        file>>data;
-        arr2[i] = data;
-      }
-
-      // hgui->plotTdata(arr1,time_plot,datasize);
-
-      delay = p1.delay_modified(arr1,arr2,datasize,hgui);
-      cout<<delay<<endl;
-      if (delay == 101)
-      {
-        cout<<"Data could not be flushed/Process interupted\n";
-      }
-
-      a.exec();
-      hgui->resetGraphAll();
-
-      cout<<"enter y to continue:";
-      cin>>choice;
-
-      if(choice == 'y')
-        continue;
-      else
-        break;
-    }
-    cout<<"file closed"<<endl;
-    file.close();
-
+    cout<<"Tdata Empty \n";
+    return 0;
   }
 
+  float power = 0;
+  for(int i=0; i<tdata.size(); i++)
+  {
+    power += abs(tdata.at(i));
+  }
+  return power;
+}
+//////////////////////////////CONTROLLER FUNC///////////////////////////////////////////////////////////////////////
+
+/////////////////////MAIN FUNCTION///////////////////////////////////////////////////////////////////////////////////
+int main(int argc, char** argv)
+{
+  // initial setup term
+  Controller c1(init_gui,init_mission,init_state);
+  QApplication a(argc, argv);
+  Hydrophones h;
+  Hydrophones* hgui = &h;
+  Pair p1;
+  double delay =0;
+
+  while(true)
+  {
+
+    if(c1.state)// continue reading data
+    {
+        if(!p1.getData(datasize))
+        cout<<"could not load the data..!!\n";
+
+        delay = p1.getData(hgui);// add 2 parameters mode Fc and return the time indx
+        cout<<delay<<endl;
+        // cntrDelay(int);
+        if (delay == 101)
+        {
+          cout<<"Data could not be flushed/Process interupted\n";
+        }
+
+        if (c1.gui)
+        {
+            hgui->show();
+            a.exec();
+            hgui->resetGraphAll();
+
+        }
+        // time.delay(c1.lag)
+        // c1.sendToServer()
+        // c1.readFromServer();
+    }
+
+  }
 
 return 0;
 }
