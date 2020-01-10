@@ -62,14 +62,15 @@ class Hydrophone{
       void calFreq();
       vector< complex<float> >  peakExtraction(int ind,int win,ofstream& file);//find the Xseg by ifft of the data
       vector< complex<float> >  peakExtraction(int ind,int win);
-      void filter(float);
+      void filter(float);// add filter_win and center frequency
       void debug(int);
       void debug(int,Hydrophones*,int);
       void writeFile(int,char*);
       void writeFile(vector<float>,ofstream& file);
 
 };
-int Hydrophone::hyd_num = 0;
+
+int Hydrophone::hyd_num = 1;
 
 
 
@@ -113,3 +114,21 @@ class Pair: private Hydrophone {
 };
 
 int Pair::pair_num = 1;
+
+class Controller{
+  static int cntrl_num;
+  float peak_time;
+  int state; // if 1 then reading will be taken if 0 then no reading
+  int gui;  // if 1 then display gui if 0 then no gui
+  int mission; // if 37.5khz are executed of 455khz
+
+
+private:
+  bool cntrlDelay(int); // take int btw (0-1)to calculate the delay required foro next ping to stay near center
+  // bool sendToServer();
+  // bool readFrom Server();
+
+
+};
+
+int Controller::cntrl_num = 1;
