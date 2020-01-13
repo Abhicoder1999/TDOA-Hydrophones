@@ -18,7 +18,7 @@ int range = 200;
 //change the value to change the thresholding value (displayed in output too)
 
 // and remember you are getting delay not the angle
-int init_state = 0; //initial default acquisition state of ADC
+int init_state = 1; //initial default acquisition state of ADC
 int init_gui = 1; //intial setting for gui
 int init_mission = 0; // initial setting of the missions
 
@@ -803,7 +803,7 @@ int main(int argc, char** argv)
         if(!p1.getData(datasize))
         cout<<"could not load the data..!!\n";
 
-        delay = p1.getData(hgui);// add 2 parameters mode Fc and return the time indx
+        delay = p1.delay(hgui);// add 2 parameters mode Fc and return the time indx
         cout<<delay<<endl;
         // cntrDelay(int);
         if (delay == 101)
