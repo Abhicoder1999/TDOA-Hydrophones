@@ -62,7 +62,7 @@ class Hydrophone{
       void calFreq();
       vector< complex<float> >  peakExtraction(int ind,int win,ofstream& file);//find the Xseg by ifft of the data
       vector< complex<float> >  peakExtraction(int ind,int win);
-      void filter(float);// add filter_win and center frequency
+      void filter(float,float);// add filter_win and center frequency
       void debug(int);
       void debug(int,Hydrophones*,int);
       void writeFile(int,char*);
@@ -125,7 +125,7 @@ public:
   float lag;
   int state; // if 1 then reading will be taken if 0 then no reading
   int gui;  // if 1 then display gui if 0 then no gui
-  int mission; // if 37.5khz are executed of 45khz
+  int mission; // if 0 then 37.5khz are executed, if 1 then 45khz
 
   Controller()
   {

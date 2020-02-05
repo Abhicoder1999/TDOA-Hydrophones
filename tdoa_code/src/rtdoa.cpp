@@ -6,10 +6,15 @@
 long int datasize = 100000;
 // choose datasize such t = timeperiod of ping + T/2
 //time of data you want can be changed by changing datasize length
-int flt_freq = 40000;
+// int flt_freq = 40000;
+int flt_win = 2000;
+int freq_mod1 = 45000;
+int freq_mod0 = 37500;
+int mode = 0; //sets the intial mode of the mission
 // filtering frequency
 //check line 507 to set another frequency filter if you
 //find 2 peaks in the spectrum then set freq1 & freq2
+
 int best_pings = 1;
 // set this on the basis of the pings you get after visualising it
 
@@ -311,9 +316,16 @@ double Pair::delay(Hydrophones* hgui)
 
     // h2.writeFile(2,"../plots/h2fr.txt");
     // h1.writeFile(2,"../plots/h1fr.txt");
-
-    h1.filter(Fs);
-    h2.filter(Fs);
+    if(mode)
+    {
+      h1.filter(Fs,freq_mod1);
+      h2.filter(Fs,freq_mod1);
+    }
+    else
+    {
+      h1.filter(Fs,freq_mod0);
+      h2.filter(Fs,freq_mod0);
+    }
 
     h1.debug(1,hgui,1);
     h2.debug(2,hgui,1);
@@ -717,7 +729,7 @@ void Hydrophone::calFreq()
 
 }
 
-void Hydrophone::filter(float Fs)
+void Hydrophone::filter(float Fs,float Fc)
 {
   // cout<<Fs<<" "<<fdata.size()<<endl;
   //check the frequency domain of the data and set these peaks
@@ -725,11 +737,12 @@ void Hydrophone::filter(float Fs)
   { float b = (float)(Fs)/(float)(fdata.size());
     // cout<<b<<endl;
     // vector< complex<float> > fdata_filt(fdata.size(),0);
-    int fpass1 = 78000;//remember the order fpass1<fpass2
-    int fpass2 = 82000;//if you are getting any
+    int fpass1 = 2*Fc - flt_win;//remember the order fpass1<fpass2
+    int fpass2 = 2*Fc + flt_win;//if you are getting any
 
-    int fpass3 = flt_freq - 2000; //remember the order fpass3<fpass4
-    int fpass4 = flt_freq + 2000;
+
+    int fpass3 = Fc - flt_win; //remember the order fpass3<fpass4
+    int fpass4 = Fc + flt_win;
 
 
     for(int i=0;i<fdata.size();i++)
@@ -802,7 +815,7 @@ int main(int argc, char** argv)
     {
         if(!p1.getData(datasize))
         cout<<"could not load the data..!!\n";
-
+        mode = c1.mission;// update the mode at each iteration based on mission planner
         delay = p1.delay(hgui);// add 2 parameters mode Fc and return the time indx
         cout<<delay<<endl;
         // cntrDelay(int);

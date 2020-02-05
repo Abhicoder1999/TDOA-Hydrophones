@@ -5,10 +5,11 @@ add_compile_options("-fpermissive")
 
 ############# FOR GUI ###################
 
-find_package(catkin REQUIRED COMPONENTS
-  qt_build
-  std_msgs
-)
+#find_package(
+#  catkin REQUIRED COMPONENTS
+#  qt_build
+#  std_msgs
+#)
 
 find_package(Qt4 REQUIRED COMPONENTS QtCore QtGui)
 include(${QT_USE_FILE})
