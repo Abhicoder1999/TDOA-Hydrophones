@@ -7,6 +7,7 @@ long int datasize = 100000;
 // choose datasize such t = timeperiod of ping + T/2
 //time of data you want can be changed by changing datasize length
 int flt_freq = 40000;
+int flt_win = 2000;
 // filtering frequency
 //check line 507 to set another frequency filter if you
 //find 2 peaks in the spectrum then set freq1 & freq2
@@ -20,7 +21,7 @@ int range = 200;
 // and remember you are getting delay not the angle
 
 /////////////////PAIR_FUN/////////////////////////////////
-float Pair::getData(long len = datasize)
+bool Pair::getData(long len = datasize)
 {
       if(flushData())
       cout<<"data flushing done..!";
@@ -309,8 +310,8 @@ double Pair::delay(Hydrophones* hgui)
     // h2.writeFile(2,"../plots/h2fr.txt");
     // h1.writeFile(2,"../plots/h1fr.txt");
 
-    h1.filter(Fs);
-    h2.filter(Fs);
+    h1.filter(Fs,flt_freq);
+    h2.filter(Fs,flt_freq);
 
     h1.debug(1,hgui,1);
     h2.debug(2,hgui,1);
@@ -707,7 +708,7 @@ void Hydrophone::calFreq()
 
 }
 
-void Hydrophone::filter(float Fs)
+void Hydrophone::filter(float Fs,float Fc)
 {
   // cout<<Fs<<" "<<fdata.size()<<endl;
   //check the frequency domain of the data and set these peaks
@@ -715,11 +716,12 @@ void Hydrophone::filter(float Fs)
   { float b = (float)(Fs)/(float)(fdata.size());
     // cout<<b<<endl;
     // vector< complex<float> > fdata_filt(fdata.size(),0);
-    int fpass1 = 78000;//remember the order fpass1<fpass2
-    int fpass2 = 82000;//if you are getting any
+    int fpass1 = 2*Fc - flt_win;//remember the order fpass1<fpass2
+    int fpass2 = 2*Fc + flt_win;//if you are getting any
 
-    int fpass3 = flt_freq - 2000; //remember the order fpass3<fpass4
-    int fpass4 = flt_freq + 2000;
+
+    int fpass3 = Fc - flt_win; //remember the order fpass3<fpass4
+    int fpass4 = Fc + flt_win;
 
 
     for(int i=0;i<fdata.size();i++)
@@ -732,6 +734,7 @@ void Hydrophone::filter(float Fs)
       else
       fdata.at(i) = 0;
     }
+
 
 
     std::complex<float>* input = fdata.data();

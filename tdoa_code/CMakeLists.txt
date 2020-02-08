@@ -43,7 +43,7 @@ add_library(tdoa_lib include/Util.h include/tdoa.h src/Util.cpp ${QT_SOURCES} ${
 target_link_libraries(tdoa_lib ${QT_LIBRARIES})
 
 #add_executable(server src/server.cpp src/Util.cpp src/hydrophones.cpp)
-#add_executable(debug src/debug.cpp src/Util.cpp src/hydrophones.cpp)
+add_executable(debug src/debug.cpp src/Util.cpp src/hydrophones.cpp)
 add_executable(rtdoa src/rtdoa.cpp src/Util.cpp src/hydrophones.cpp)
 
 #file(GLOB SOURCES "src/*.cpp")
@@ -51,5 +51,5 @@ add_executable(rtdoa src/rtdoa.cpp src/Util.cpp src/hydrophones.cpp)
 #target_link_libraries(exe liquid bcm2835 fftw3)
 
 #target_link_libraries(server liquid bcm2835 fftw3 tdoa_lib)
-#target_link_libraries(debug liquid bcm2835 fftw3 tdoa_lib)
+target_link_libraries(debug liquid bcm2835 fftw3 tdoa_lib)
 target_link_libraries(rtdoa liquid bcm2835 fftw3 tdoa_lib)

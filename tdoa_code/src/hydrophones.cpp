@@ -54,6 +54,7 @@ void Hydrophones::plotTdata(double arr[], int time[], int length) {
   }
   ui->tdata->replot();
   ui->tdata->yAxis->rescale();
+  ui->tdata->xAxis->rescale();
   ui->tdata->replot();
 }
 void Hydrophones::plotFdata(double arr[], int time[], int length) {
@@ -62,6 +63,7 @@ void Hydrophones::plotFdata(double arr[], int time[], int length) {
   }
   ui->fdata->replot();
   ui->fdata->yAxis->rescale();
+  ui->fdata->xAxis->rescale();
   ui->fdata->replot();
 }
 void Hydrophones::plotSegment(double arr[], int time[], int length) {
@@ -70,6 +72,7 @@ void Hydrophones::plotSegment(double arr[], int time[], int length) {
   }
   ui->segment->replot();
   ui->segment->yAxis->rescale();
+  ui->segment->xAxis->rescale();
   ui->segment->replot();
 }
 void Hydrophones::plotCorrelation(double arr[], int time[], int length) {
@@ -78,6 +81,7 @@ void Hydrophones::plotCorrelation(double arr[], int time[], int length) {
   }
   ui->correlation->replot();
   ui->correlation->yAxis->rescale();
+  ui->correlation->xAxis->rescale();
   ui->correlation->replot();
 }
 void Hydrophones::resetGraphAll() {
@@ -91,23 +95,27 @@ void Hydrophones::resetGraphTdata() {
   ui->tdata->graph()->data()->clear();
   ui->tdata->replot();
   ui->tdata->yAxis->rescale();
+  ui->tdata->xAxis->rescale();
   ui->tdata->replot();
 }
 void Hydrophones::resetGraphFdata() {
   ui->fdata->graph()->data()->clear();
   ui->fdata->replot();
   ui->fdata->yAxis->rescale();
+  ui->fdata->xAxis->rescale();
   ui->fdata->replot();
 }
 void Hydrophones::resetGraphSegment() {
   ui->segment->graph()->data()->clear();
   ui->segment->replot();
   ui->segment->yAxis->rescale();
+  ui->segment->xAxis->rescale();
   ui->segment->replot();
 }
 void Hydrophones::resetGraphCorrelation() {
   ui->correlation->graph()->data()->clear();
   ui->correlation->replot();
   ui->correlation->yAxis->rescale();
+  ui->correlation->xAxis->rescale();
   ui->correlation->replot();
 }
