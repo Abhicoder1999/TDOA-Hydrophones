@@ -618,6 +618,7 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
 
   int time_plot[datasize];
   for(int i=0;i<datasize;i++){time_plot[i]=i;}
+
   if (choice == 1)
   {
 
@@ -625,25 +626,37 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
 
@@ -654,25 +667,37 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
 
@@ -683,25 +708,37 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
 

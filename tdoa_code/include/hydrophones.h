@@ -17,15 +17,20 @@ class Hydrophones : public QMainWindow {
 public:
   explicit Hydrophones(QWidget *parent = 0);
   ~Hydrophones();
-  void plotTdata(double arr[], int time[], int length);
-  void plotFdata(double arr[], int time[], int length);
-  void plotSegment(double arr[], int time[], int length);
-  void plotCorrelation(double arr[], int time[], int length);
+  void plotFdata1(double arr[], int time[], int length);
+  void plotFdata2(double arr[], int time[], int length);
+  void plotFildata1(double arr[], int time[], int length);
+  void plotFildata2(double arr[], int time[], int length);
+  void plotTdata1(double arr[], int time[], int length);
+  void plotTdata2(double arr[], int time[], int length);
+
 public slots:
-  void resetGraphTdata();
-  void resetGraphFdata();
-  void resetGraphSegment();
-  void resetGraphCorrelation();
+  void resetGraphFdata1();
+  void resetGraphFdata2();
+  void resetGraphFildata1();
+  void resetGraphFildata2();
+  void resetGraphTdata1();
+  void resetGraphTdata2();
   void resetGraphAll();
 
 private:

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>402</width>
-    <height>338</height>
+    <width>763</width>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -82,10 +82,10 @@
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>50</y>
-      <width>361</width>
-      <height>211</height>
+      <width>721</width>
+      <height>351</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -95,31 +95,31 @@
      <property name="spacing">
       <number>6</number>
      </property>
+     <item row="0" column="0">
+      <widget class="QCustomPlot" name="fdata1" native="true"/>
+     </item>
      <item row="2" column="0">
-      <widget class="QCustomPlot" name="segment" native="true"/>
+      <widget class="QCustomPlot" name="tdata1" native="true"/>
      </item>
      <item row="1" column="0">
-      <widget class="QCustomPlot" name="tdata" native="true"/>
+      <widget class="QCustomPlot" name="fildata1" native="true"/>
      </item>
      <item row="2" column="1">
-      <widget class="QCustomPlot" name="correlation" native="true"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QCustomPlot" name="fdata" native="true"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QCustomPlot" name="widget" native="true"/>
+      <widget class="QCustomPlot" name="tdata2" native="true"/>
      </item>
      <item row="1" column="1">
-      <widget class="QCustomPlot" name="widget_2" native="true"/>
+      <widget class="QCustomPlot" name="fildata2" native="true"/>
+     </item>
+     <item row="0" column="1">
+      <widget class="QCustomPlot" name="fdata2" native="true"/>
      </item>
     </layout>
-    <zorder>widget_2</zorder>
-    <zorder>segment</zorder>
-    <zorder>tdata</zorder>
-    <zorder>correlation</zorder>
-    <zorder>fdata</zorder>
-    <zorder>widget</zorder>
+    <zorder>fildata2</zorder>
+    <zorder>tdata1</zorder>
+    <zorder>fildata1</zorder>
+    <zorder>tdata2</zorder>
+    <zorder>fdata2</zorder>
+    <zorder>fdata1</zorder>
    </widget>
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
@@ -145,7 +145,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>402</width>
+     <width>763</width>
      <height>22</height>
     </rect>
    </property>

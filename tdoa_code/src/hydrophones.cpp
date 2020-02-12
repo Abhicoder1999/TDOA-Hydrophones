@@ -5,117 +5,167 @@ Hydrophones::Hydrophones(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::Hydrophones) {
   ui->setupUi(this);
 
-  ui->tdata->addGraph()->setName("tdata");
-  ui->fdata->addGraph()->setName("fdata");
-  ui->segment->addGraph()->setName("segment");
-  ui->correlation->addGraph()->setName("correlation");
+  ui->fdata1->addGraph()->setName("fdata1");
+  ui->fdata2->addGraph()->setName("fdata2");
+  ui->fildata1->addGraph()->setName("fildata1");
+  ui->fildata2->addGraph()->setName("fildata2");
+  ui->tdata1->addGraph()->setName("tdata1");
+  ui->tdata2->addGraph()->setName("tdata2");
 
-  ui->tdata->graph()->setPen(QPen(Qt::red));
-  ui->fdata->graph()->setPen(QPen(Qt::green));
-  ui->segment->graph()->setPen(QPen(Qt::blue));
-  ui->correlation->graph()->setPen(QPen(Qt::yellow));
+  ui->fdata1->graph()->setPen(QPen(Qt::red));
+  ui->fdata2->graph()->setPen(QPen(Qt::green));
+  ui->fildata1->graph()->setPen(QPen(Qt::blue));
+  ui->fildata2->graph()->setPen(QPen(Qt::magenta));
+  ui->tdata1->graph()->setPen(QPen(Qt::cyan));
+  ui->tdata2->graph()->setPen(QPen(Qt::darkGreen));
 
-  ui->tdata->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->tdata->axisRect()->setRangeZoom(Qt::Horizontal);
-  ui->tdata->axisRect()->setRangeZoomFactor(1.5);
-  ui->tdata->xAxis->setRange(0, Range_tdata);
+  ui->fdata1->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->fdata1->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->fdata1->axisRect()->setRangeZoomFactor(1.5);
+  // ui->fdata1->xAxis->setRange(0, Range_fdata1);
 
-  ui->fdata->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->fdata->axisRect()->setRangeZoom(Qt::Horizontal);
-  ui->fdata->axisRect()->setRangeZoomFactor(1.5);
-  ui->fdata->xAxis->setRange(0, Range_fdata);
+  ui->fdata2->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->fdata2->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->fdata2->axisRect()->setRangeZoomFactor(1.5);
+  // ui->fdata2->xAxis->setRange(0, Range_fdata);
 
-  ui->segment->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->segment->axisRect()->setRangeZoom(Qt::Horizontal);
-  ui->segment->axisRect()->setRangeZoomFactor(1.5);
-  ui->segment->xAxis->setRange(0, Range_segment);
+  ui->fildata1->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->fildata1->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->fildata1->axisRect()->setRangeZoomFactor(1.5);
+  // ui->fildata1->xAxis->setRange(0, Range_fildata1);
 
-  ui->correlation->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-  ui->correlation->axisRect()->setRangeZoom(Qt::Horizontal);
-  ui->correlation->axisRect()->setRangeZoomFactor(1.5);
-  ui->correlation->xAxis->setRange(0, Range_correlation);
+  ui->fildata2->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->fildata2->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->fildata2->axisRect()->setRangeZoomFactor(1.5);
+  // ui->fildata2->xAxis->setRange(0, Range_fildata2);
 
-  connect(ui->reset_tdata, SIGNAL(pressed()), this, SLOT(resetGraphTdata()));
-  connect(ui->reset_fdata, SIGNAL(pressed()), this, SLOT(resetGraphFdata()));
-  connect(ui->reset_segment, SIGNAL(pressed()), this,
-          SLOT(resetGraphSegment()));
-  connect(ui->reset_correlation, SIGNAL(pressed()), this,
-          SLOT(resetGraphCorrelation()));
-  connect(ui->reset_all, SIGNAL(pressed()), this, SLOT(resetGraphAll()));
+  ui->tdata1->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->tdata1->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->tdata1->axisRect()->setRangeZoomFactor(1.5);
+  // ui->tdata1->xAxis->setRange(0, Range_fdata1);
+
+  ui->tdata2->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+  ui->tdata2->axisRect()->setRangeZoom(Qt::Horizontal);
+  ui->tdata2->axisRect()->setRangeZoomFactor(1.5);
+  // ui->tdata2->xAxis->setRange(0, Range_fdata);
+
+  // connect(ui->reset_fdata1, SIGNAL(pressed()), this, SLOT(resetGraphTdata()));
+  // connect(ui->reset_fdata, SIGNAL(pressed()), this, SLOT(resetGraphFdata()));
+  // connect(ui->reset_fildata1, SIGNAL(pressed()), this,
+  //         SLOT(resetGraphSegment()));
+  // connect(ui->reset_fildata2, SIGNAL(pressed()), this,
+  //         SLOT(resetGraphCorrelation()));
+  // connect(ui->reset_all, SIGNAL(pressed()), this, SLOT(resetGraphAll()));
   this->show();
 }
 
 Hydrophones::~Hydrophones() { delete ui; }
 
-void Hydrophones::plotTdata(double arr[], int time[], int length) {
+void Hydrophones::plotFdata1(double arr[], int time[], int length) {
 
   for (int i = 0; i < length; i++) {
-    ui->tdata->graph()->addData(time[i], arr[i]);
+    ui->fdata1->graph()->addData(time[i], arr[i]);
   }
-  ui->tdata->replot();
-  ui->tdata->yAxis->rescale();
-  ui->tdata->xAxis->rescale();
-  ui->tdata->replot();
+  ui->fdata1->replot();
+  ui->fdata1->yAxis->rescale();
+  ui->fdata1->xAxis->rescale();
+  ui->fdata1->replot();
 }
-void Hydrophones::plotFdata(double arr[], int time[], int length) {
+void Hydrophones::plotFdata2(double arr[], int time[], int length) {
   for (int i = 0; i < length; i++) {
-    ui->fdata->graph()->addData(time[i], arr[i]);
+    ui->fdata2->graph()->addData(time[i], arr[i]);
   }
-  ui->fdata->replot();
-  ui->fdata->yAxis->rescale();
-  ui->fdata->xAxis->rescale();
-  ui->fdata->replot();
+  ui->fdata2->replot();
+  ui->fdata2->yAxis->rescale();
+  ui->fdata2->xAxis->rescale();
+  ui->fdata2->replot();
 }
-void Hydrophones::plotSegment(double arr[], int time[], int length) {
+void Hydrophones::plotFildata1(double arr[], int time[], int length) {
   for (int i = 0; i < length; i++) {
-    ui->segment->graph()->addData(time[i], arr[i]);
+    ui->fildata1->graph()->addData(time[i], arr[i]);
   }
-  ui->segment->replot();
-  ui->segment->yAxis->rescale();
-  ui->segment->xAxis->rescale();
-  ui->segment->replot();
+  ui->fildata1->replot();
+  ui->fildata1->yAxis->rescale();
+  ui->fildata1->xAxis->rescale();
+  ui->fildata1->replot();
 }
-void Hydrophones::plotCorrelation(double arr[], int time[], int length) {
+void Hydrophones::plotFildata2(double arr[], int time[], int length) {
   for (int i = 0; i < length; i++) {
-    ui->correlation->graph()->addData(time[i], arr[i]);
+    ui->fildata2->graph()->addData(time[i], arr[i]);
   }
-  ui->correlation->replot();
-  ui->correlation->yAxis->rescale();
-  ui->correlation->xAxis->rescale();
-  ui->correlation->replot();
+  ui->fildata2->replot();
+  ui->fildata2->yAxis->rescale();
+  ui->fildata2->xAxis->rescale();
+  ui->fildata2->replot();
+}
+void Hydrophones::plotTdata1(double arr[], int time[], int length) {
+
+  for (int i = 0; i < length; i++) {
+    ui->tdata1->graph()->addData(time[i], arr[i]);
+  }
+  ui->tdata1->replot();
+  ui->tdata1->yAxis->rescale();
+  ui->tdata1->xAxis->rescale();
+  ui->tdata1->replot();
+}
+void Hydrophones::plotTdata2(double arr[], int time[], int length) {
+  for (int i = 0; i < length; i++) {
+    ui->tdata2->graph()->addData(time[i], arr[i]);
+  }
+  ui->tdata2->replot();
+  ui->tdata2->yAxis->rescale();
+  ui->tdata2->xAxis->rescale();
+  ui->tdata2->replot();
 }
 void Hydrophones::resetGraphAll() {
-  resetGraphTdata();
-  resetGraphFdata();
-  resetGraphSegment();
-  resetGraphCorrelation();
+  resetGraphFdata1();
+  resetGraphFdata2();
+  resetGraphFildata1();
+  resetGraphFildata2();
+  resetGraphTdata1();
+  resetGraphTdata2();
 }
 
-void Hydrophones::resetGraphTdata() {
-  ui->tdata->graph()->data()->clear();
-  ui->tdata->replot();
-  ui->tdata->yAxis->rescale();
-  ui->tdata->xAxis->rescale();
-  ui->tdata->replot();
+void Hydrophones::resetGraphFdata1() {
+  ui->fdata1->graph()->data()->clear();
+  ui->fdata1->replot();
+  ui->fdata1->yAxis->rescale();
+  ui->fdata1->xAxis->rescale();
+  ui->fdata1->replot();
 }
-void Hydrophones::resetGraphFdata() {
-  ui->fdata->graph()->data()->clear();
-  ui->fdata->replot();
-  ui->fdata->yAxis->rescale();
-  ui->fdata->xAxis->rescale();
-  ui->fdata->replot();
+void Hydrophones::resetGraphFdata2() {
+  ui->fdata2->graph()->data()->clear();
+  ui->fdata2->replot();
+  ui->fdata2->yAxis->rescale();
+  ui->fdata2->xAxis->rescale();
+  ui->fdata2->replot();
 }
-void Hydrophones::resetGraphSegment() {
-  ui->segment->graph()->data()->clear();
-  ui->segment->replot();
-  ui->segment->yAxis->rescale();
-  ui->segment->xAxis->rescale();
-  ui->segment->replot();
+void Hydrophones::resetGraphFildata1() {
+  ui->fildata1->graph()->data()->clear();
+  ui->fildata1->replot();
+  ui->fildata1->yAxis->rescale();
+  ui->fildata1->xAxis->rescale();
+  ui->fildata1->replot();
 }
-void Hydrophones::resetGraphCorrelation() {
-  ui->correlation->graph()->data()->clear();
-  ui->correlation->replot();
-  ui->correlation->yAxis->rescale();
-  ui->correlation->xAxis->rescale();
-  ui->correlation->replot();
+void Hydrophones::resetGraphFildata2() {
+  ui->fildata2->graph()->data()->clear();
+  ui->fildata2->replot();
+  ui->fildata2->yAxis->rescale();
+  ui->fildata2->xAxis->rescale();
+  ui->fildata2->replot();
+}
+
+void Hydrophones::resetGraphTdata1() {
+  ui->tdata1->graph()->data()->clear();
+  ui->tdata1->replot();
+  ui->tdata1->yAxis->rescale();
+  ui->tdata1->xAxis->rescale();
+  ui->tdata1->replot();
+}
+void Hydrophones::resetGraphTdata2() {
+  ui->tdata2->graph()->data()->clear();
+  ui->tdata2->replot();
+  ui->tdata2->yAxis->rescale();
+  ui->tdata2->xAxis->rescale();
+  ui->tdata2->replot();
 }

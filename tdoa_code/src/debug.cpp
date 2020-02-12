@@ -302,7 +302,8 @@ double Pair::delay(Hydrophones* hgui)
 
     h1.calFreq();
     h2.calFreq();
-
+    h1.debug(1,hgui,1);
+    h2.debug(2,hgui,1);
 
     // h1.debug(2);
     // h2.debug(2);
@@ -313,11 +314,11 @@ double Pair::delay(Hydrophones* hgui)
     h1.filter(Fs,flt_freq);
     h2.filter(Fs,flt_freq);
 
-    h1.debug(1,hgui,1);
-    h2.debug(2,hgui,1);
-
     h1.debug(3,hgui,2);
     h2.debug(4,hgui,2);
+
+    h1.debug(5,hgui,1);
+    h2.debug(6,hgui,1);
 
 
     // h2.writeFile(2,"../plots/h2filt.txt");
@@ -383,6 +384,8 @@ double Pair::delay(Hydrophones* hgui)
     std = stdDev(d);
     cout<<"calculated delay:"<<ans<<endl;
     cout<<"std deviation:"<<std<<endl;
+    // h1.debug(5,hgui,3);
+    // h2.debug(6,hgui,3);
 
     return ans;
 
@@ -597,6 +600,7 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
 
   int time_plot[datasize];
   for(int i=0;i<datasize;i++){time_plot[i]=i;}
+
   if (choice == 1)
   {
 
@@ -604,25 +608,37 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(tdata,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(tdata,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
 
@@ -633,25 +649,37 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(fdata,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(fdata,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
 
@@ -662,28 +690,39 @@ void Hydrophone::debug(int i,Hydrophones* hgui,int choice)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotTdata(temp,time_plot,datasize);
+      hgui->plotFdata1(temp,time_plot,datasize);
     }
     if(i == 2)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotFdata(temp,time_plot,datasize);
+      hgui->plotFdata2(temp,time_plot,datasize);
     }
     if(i == 3)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotSegment(temp,time_plot,datasize);
+      hgui->plotFildata1(temp,time_plot,datasize);
     }
     if(i == 4)
     {
       double temp[datasize];
       convtDouble(pkind,datasize,temp);
-      hgui->plotCorrelation(temp,time_plot,datasize);
+      hgui->plotFildata2(temp,time_plot,datasize);
+    }
+    if(i == 5)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotTdata1(temp,time_plot,datasize);
+    }
+    if(i == 6)
+    {
+      double temp[datasize];
+      convtDouble(pkind,datasize,temp);
+      hgui->plotTdata2(temp,time_plot,datasize);
     }
   }
-
 }
 
 
@@ -817,13 +856,13 @@ int main(int argc, char** argv)
       a.exec();
       hgui->resetGraphAll();
 
-      cout<<"enter y to continue:";
-      cin>>choice;
+      // cout<<"enter y to continue:";
+      // cin>>choice;
 
-      if(choice == 'y')
-        continue;
-      else
-        break;
+      // if(choice == 'y')
+      //   continue;
+      // else
+      //   break;
     }
     cout<<"file closed"<<endl;
     file.close();
